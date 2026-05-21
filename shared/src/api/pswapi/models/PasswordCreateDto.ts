@@ -51,10 +51,22 @@ export interface PasswordCreateDto {
     password: string;
     /**
      * 
+     * @type {string}
+     * @memberof PasswordCreateDto
+     */
+    otpCode: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof PasswordCreateDto
      */
     favorite: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PasswordCreateDto
+     */
+    haveOtp: boolean;
 }
 
 /**
@@ -65,7 +77,9 @@ export function instanceOfPasswordCreateDto(value: object): value is PasswordCre
     if (!('service' in value) || value['service'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
     if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('otpCode' in value) || value['otpCode'] === undefined) return false;
     if (!('favorite' in value) || value['favorite'] === undefined) return false;
+    if (!('haveOtp' in value) || value['haveOtp'] === undefined) return false;
     return true;
 }
 
@@ -84,7 +98,9 @@ export function PasswordCreateDtoFromJSONTyped(json: any, ignoreDiscriminator: b
         'website': json['website'] == null ? undefined : json['website'],
         'username': json['username'],
         'password': json['password'],
+        'otpCode': json['otpCode'],
         'favorite': json['favorite'],
+        'haveOtp': json['haveOtp'],
     };
 }
 
@@ -104,7 +120,9 @@ export function PasswordCreateDtoToJSONTyped(value?: PasswordCreateDto | null, i
         'website': value['website'],
         'username': value['username'],
         'password': value['password'],
+        'otpCode': value['otpCode'],
         'favorite': value['favorite'],
+        'haveOtp': value['haveOtp'],
     };
 }
 

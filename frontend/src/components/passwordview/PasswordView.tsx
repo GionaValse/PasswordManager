@@ -10,11 +10,13 @@ import type {
 } from 'shared-password-manager/api';
 import { useModal } from 'shared-password-manager/hooks';
 import {
+  CheckboxView,
   ErrorBoxView,
   ExtraAction,
   HeaderView,
   InputView,
   LoadingView,
+  ProgressbarView,
   QrCodeView,
   SubmitButton,
 } from 'shared-password-manager/ui';
@@ -48,7 +50,9 @@ const handleQuery = async ({
       username: '',
       website: '',
       password: '',
+      otpCode: '',
       favorite: false,
+      haveOtp: false,
       creationDate: new Date(),
       modifiedDate: new Date(),
     };
@@ -180,6 +184,11 @@ function CurrentPassowrdView({
     validateForm(form);
   };
 
+  const handleOtpChange = (haveOtp: boolean) => {
+    setEditData((prev) => ({ ...prev, haveOtp }));
+    validateForm(null);
+  };
+
   const handleFavorite = async () => {
     if (!editData.id) return;
     mutationFavorite.mutate(!initialData.favorite);
@@ -291,13 +300,32 @@ function CurrentPassowrdView({
             enableCopy={!isNewPassword}
           />
           {(isEditing || isNewPassword) && (
-            <SubmitButton
-              text={isNewPassword ? 'Add' : 'Save'}
-              align="right"
-              disabled={!isFormValid || mutationSubmit.isPending}
-            />
+            <>
+              <CheckboxView
+                checked={editData.haveOtp}
+                onChange={handleOtpChange}
+                label="Use One-Time Password (OTP)"
+              />
+              <SubmitButton
+                text={isNewPassword ? 'Add' : 'Save'}
+                align="right"
+                disabled={!isFormValid || mutationSubmit.isPending}
+              />
+            </>
           )}
         </form>
+        {!isEditing && !isNewPassword && editData.haveOtp && (
+          <>
+            <div className="divider"></div>
+            <div className={styles.otpContainer}>
+              <h3>ABC 123</h3>
+              <div className={styles.countdown}>
+                <ProgressbarView progress={20} max={30} />
+                <span>20s</span>
+              </div>
+            </div>
+          </>
+        )}
         <div className="divider"></div>
         {!isNewPassword && (
           <>
