@@ -1,0 +1,22 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolvePackageJsonExports": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "incremental": true,
+    "strictPropertyInitialization": false,
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+    "types": ["node", "jest"]
+  },
+  "include": ["src/**/*", "test/**/*"]
+}

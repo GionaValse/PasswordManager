@@ -1,0 +1,11 @@
+.appRoot {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+}
+
+@media screen and (min-width: 720px) and (max-width: 960px) {
+  .appRoot {
+    padding-left: 80px;
+  }
+}

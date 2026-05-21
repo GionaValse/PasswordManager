@@ -1,0 +1,5 @@
+.vaultView {
+  position: relative;
+  min-width: 320px;
+  flex: 1 1;
+}

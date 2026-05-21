@@ -1,0 +1,79 @@
+.headerView {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 64px;
+  padding: 6px 24px;
+  border-bottom: 1px solid var(--color-divider);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.headerView.withBackButtonForced {
+  padding: 6px 12px;
+}
+
+.headerView .backButton {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 4px;
+  color: var(--color-on-background);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.headerView.withBackButtonForced .backButton {
+  display: flex;
+}
+
+.headerView .backButton:hover {
+  background-color: var(--color-list-item-hover);
+}
+
+.headerView .headerContent {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.headerView .headerContent .headerTitle {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 22px;
+  letter-spacing: 0;
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.headerView .headerContent .headerSubtitle {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 18px;
+  letter-spacing: 0;
+  color: var(--text-muted);
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 720px) {
+  .headerView.withBackButton {
+    padding: 6px 12px;
+  }
+
+  .headerView .backButton {
+    display: flex;
+  }
+}

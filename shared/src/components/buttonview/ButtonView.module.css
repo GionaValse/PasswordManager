@@ -1,0 +1,86 @@
+.buttonWrapper {
+  display: flex;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.buttonWrapper[data-align='left'] {
+  justify-content: flex-start;
+}
+
+.buttonWrapper[data-align='center'] {
+  justify-content: center;
+}
+
+.buttonWrapper[data-align='right'] {
+  justify-content: flex-end;
+}
+
+.btn {
+  appearance: none;
+  border: none;
+  outline: none;
+  padding: 12px 36px;
+  font-size: 14px;
+  font-weight: 600;
+  height: 36px;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.btn:hover:not(:disabled) {
+  border-radius: 12px;
+  transition-property: border-radius color;
+}
+
+.primary {
+  background-color: var(--color-primary, #007bff);
+  color: var(--color-on-primary, white);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark, #0056b3);
+}
+
+.outline {
+  background-color: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.outline:hover:not(:disabled) {
+  background-color: var(--color-primary-bg, rgba(0, 123, 255, 0.1));
+}
+
+.error {
+  background-color: var(--color-error, #ef4444);
+  color: var(--color-on-error, white);
+}
+
+.error:hover:not(:disabled) {
+  background-color: var(--color-error-dark, #ef4444);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.content {
+  flex: auto;
+}
+
+.flex {
+  flex: 1;
+}

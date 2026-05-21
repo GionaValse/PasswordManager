@@ -1,0 +1,28 @@
+.sessionContainer {
+  position: relative;
+  min-height: 100vh;
+  height: 100vh;
+}
+
+.sessionContainer .pageContent {
+  position: relative;
+  max-width: 1200px;
+  height: calc(100% - 48px - 80px);
+  margin: 48px auto 0;
+}
+
+.sessionContainer .pageContent.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sessionContainer .closeSessionsContainer {
+  margin-top: 48px;
+}
+
+@media screen and (max-width: 1200px) {
+  .sessionContainer .pageContent {
+    margin: 48px 24px 0;
+  }
+}

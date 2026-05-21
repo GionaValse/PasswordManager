@@ -1,0 +1,20 @@
+# Dependencies
+node_modules
+package-lock.json
+pnpm-lock.yaml
+
+# Build and Output (Web, Native ed Electron)
+dist
+build
+out
+.expo
+ios
+android
+
+# Specific folders
+frontend/src/api
+
+# Configurations and Micellaneous
+LICENSE.md
+tsconfig.json
+tsconfig.*.json

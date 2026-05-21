@@ -1,0 +1,6 @@
+.buttonContainer {
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 12px;
+}

@@ -1,0 +1,88 @@
+.extrasContainer {
+  position: relative;
+  display: flex;
+  gap: 8px;
+}
+
+/* Extra Action */
+
+.extraAction {
+  --color-hover: var(--color-list-item-hover);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 4px;
+  color: var(--color-on-background);
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.extraAction:not(.noHover) {
+  cursor: pointer;
+}
+
+.extraAction:not(.noHover):hover {
+  background-color: var(--color-hover);
+  border-radius: 12px;
+  transition-property: border-radius;
+}
+
+.extraAction.error {
+  color: var(--color-error);
+  --color-hover: var(--color-error-background);
+}
+
+.extraAction.small {
+  width: 32px;
+  height: 32px;
+}
+
+/* Extra Action Menu */
+
+.extraActionMenu {
+  position: relative;
+}
+
+.extraActionMenu .menuList {
+  position: absolute;
+  overflow: hidden;
+  top: 100%;
+  right: 0;
+  width: 120px;
+  border-radius: 6px;
+  background: var(--color-surface);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out forwards;
+  transform-origin: top right;
+}
+
+.extraActionMenu .menuList .menuListItem {
+  font-size: 16px;
+  font-weight: 200;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 6px 12px;
+  list-style: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.extraActionMenu .menuList .menuListItem:hover {
+  background: var(--color-list-item-hover);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

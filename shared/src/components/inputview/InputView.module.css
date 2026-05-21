@@ -1,0 +1,108 @@
+.inputView {
+  position: relative;
+  margin: 24px auto 12px;
+  width: 100%;
+}
+
+.inputView input {
+  font-size: 16px;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid var(--color-divider, #ccc);
+  padding: 8px 0;
+  background-color: transparent;
+  outline: none;
+  color: var(--color-on-background, #000);
+}
+
+.inputView .inputViewLabel {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  color: var(--color-text-muted, #999);
+  transition: all 0.2s ease;
+  pointer-events: none;
+  max-width: calc(100% - 70px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inputView input:focus ~ .inputViewLabel,
+.inputView input:not(:placeholder-shown) ~ .inputViewLabel {
+  top: -12px;
+  font-size: 12px;
+  color: var(--color-primary, #007bff);
+}
+
+.inputView.hasError input ~ .inputViewLabel {
+  color: var(--color-error, #ff4d4f);
+}
+
+.inputView .inputViewUnderline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: var(--color-primary, #007bff);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.inputView input:not(:read-only):focus ~ .inputViewUnderline {
+  transform: scaleX(1);
+}
+
+.inputView.hasError input:not(:read-only) ~ .inputViewUnderline {
+  background-color: var(--color-error, #ff4d4f);
+  transform: scaleX(1);
+}
+
+.inputView input:read-only {
+  border-bottom-style: dashed;
+  color: var(--color-text-muted);
+}
+
+.inputView input.hasIcons {
+  padding-right: 65px;
+}
+
+.inputView input.inputError {
+  border-bottom-color: var(--color-error, #ff4d4f);
+}
+
+.inputActions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  z-index: 2;
+}
+
+.iconCheck {
+  color: var(--color-success);
+  animation: iconPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes iconPop {
+  0% {
+    transform: scale(0.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.errorMessage {
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+  color: var(--color-error, #ff4d4f);
+  font-size: 12px;
+  transition: all 0.2s ease;
+}

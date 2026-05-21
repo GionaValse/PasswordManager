@@ -1,0 +1,50 @@
+{
+  "name": "password-manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack Password Manager - Monorepo - Academy project SUPSI DTI",
+  "author": "Giona Valsecchi",
+  "workspaces": [
+    "backend",
+    "frontend",
+    "mobile",
+    "electron",
+    "shared"
+  ],
+  "scripts": {
+    "// --- INFRASTRUCTURE & DOCKER ---": "",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:exec": "docker exec -it mongodb-passmanager mongosh -u root -p root --authenticationDatabase admin",
+    "// --- INSTALLATION ---": "",
+    "install:all": "npm install && npm exec -w frontend -- playwright install",
+    "// --- DEVELOPMENT (RUN INDIVIDUAL) ---": "",
+    "start:backend": "npm run start:dev -w backend",
+    "start:frontend": "npm run dev -w frontend",
+    "start:mobile": "npm run start -w mobile",
+    "android": "npm run android -w mobile",
+    "ios": "npx run ios -w mobile",
+    "start:electron": "npm run dev -w electron",
+    "// --- DEVELOPMENT (RUN COMBINED) ---": "",
+    "start:web": "npm run docker:up && concurrently -k -s first \"npm run start:backend\" \"npm run wait:and:frontend\"",
+    "wait:and:frontend": "wait-on http://localhost:3000/health && npm run start:frontend",
+    "// --- TESTING & QUALITY ---": "",
+    "test:all": "npm run test --workspaces",
+    "lint:all": "npm run lint --workspaces",
+    "format:all": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
+    "// --- CLEANUP ---": "",
+    "clean:all": "npm run clean --workspaces",
+    "nuke": "npm run clean:all && npx rimraf node_modules \"*/node_modules\"",
+    "rebuild": "npm run nuke && npm ci"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "eslint-config-prettier": "^10.1.8",
+    "wait-on": "^7.2.0"
+  },
+  "overrides": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "typescript": "~5.9.3"
+  }
+}

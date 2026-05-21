@@ -1,0 +1,55 @@
+.accountView {
+  position: relative;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 6px 24px;
+  gap: 12px;
+  transition: 0.3s;
+}
+
+.accountView .accountIcon,
+.accountView .session .sessionIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.accountView .accountName {
+  flex: 1 1 auto;
+  font-size: 16px;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.accountView .session {
+  position: relative;
+}
+
+.accountView .session .sessionIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  transition: 0.3s;
+  opacity: 0;
+}
+
+.accountView .session:hover .sessionIcon {
+  opacity: 1;
+}
+
+@media screen and (min-width: 720px) and (max-width: 960px) {
+  .accountView.collapsed {
+    padding: 6px 22px;
+  }
+
+  .accountView.collapsed .accountName,
+  .accountView.collapsed .accountExtras {
+    display: none;
+  }
+}

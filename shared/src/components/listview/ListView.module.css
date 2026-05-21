@@ -1,0 +1,108 @@
+/* ListView */
+
+.listView {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.listViewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  border-radius: 6px;
+  padding: 6px 24px;
+  margin-top: 24px;
+}
+
+/* ListItemView */
+.listItemView {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 6px 24px;
+  border-radius: 4px;
+  color: var(--color-on-background);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: 0.3s;
+}
+
+.listItemView.withSubtitle {
+  height: 72px;
+  border-radius: 8px;
+}
+
+.listItemView:hover {
+  background-color: var(--color-list-item-hover);
+}
+
+.listItemView.selected {
+  background-color: var(--color-list-item-hover);
+}
+
+.listItemView.selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 0 4px 4px 0;
+}
+
+.listItemView .listItemIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}
+
+.listItemView .listItemInfo {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.listItemView .listItemInfo .listItemTitle {
+  font-size: 16px;
+  line-height: 18px;
+  letter-spacing: 0;
+  font-weight: bold;
+  color: var(--color-on-background);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.listItemView .listItemInfo .listItemSubtitle {
+  display: block;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: normal;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media screen and (min-width: 720px) and (max-width: 960px) {
+  .listItemView.collapsed {
+    padding: 6px 28px;
+  }
+
+  .listItemView.collapsed .listItemInfo {
+    display: none;
+  }
+}

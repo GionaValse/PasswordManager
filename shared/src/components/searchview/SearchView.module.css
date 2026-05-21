@@ -1,0 +1,82 @@
+.searchView {
+  position: relative;
+  padding: 12px 24px;
+  margin-bottom: 24px;
+}
+
+.searchView .searchViewContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 4px;
+  gap: 4px;
+  width: 100%;
+  height: 56px;
+  border-radius: 28px;
+  background: var(--color-surface);
+  border-color: var(--color-surface);
+  transition: border-color 0.3s;
+}
+
+.searchView .searchViewInput {
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  transition: border-color 0.3s;
+}
+
+.searchView:has(.searchViewInput:focus) .searchViewContainer {
+  --color-divider: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.searchView .searchViewInputHiglight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background-color: rgba(108, 99, 255, 0.1);
+  transition: width 0.3s;
+}
+
+.searchView .searchViewInput:focus ~ .searchViewInputHiglight {
+  width: 100%;
+}
+
+.searchView .searchViewInputIcon,
+.searchView .searchViewInputIconClear {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  color: var(--color-divider);
+  transition: color 0.3s;
+}
+
+.searchView .searchViewInputIconClear {
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+}
+
+.hasValue .searchViewInputIconClear {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.searchView .searchViewInputIcon svg .searchView .searchViewInputIconClear svg {
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}

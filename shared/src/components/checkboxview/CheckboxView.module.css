@@ -1,0 +1,101 @@
+:root {
+  --cb-primary: var(--color-primary, #2196f3);
+  --cb-bg-input: var(--color-bg-input, #eee);
+  --cb-border: var(--color-border, #ccc);
+  --cb-mark-color: #fff;
+  --cb-disabled-bg: #f5f5f5;
+  --cb-disabled-border: #d9d9d9;
+  --cb-disabled-mark: #ccc;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: var(--font-size-md, 16px);
+  -webkit-user-select: none;
+  user-select: none;
+  gap: 10px;
+  line-height: 1;
+}
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: relative;
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+  background-color: var(--cb-bg-input);
+  border: 1px solid var(--cb-border);
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.container:hover input:not(:checked):not(:indeterminate):not(:disabled) ~ .checkmark {
+  border-color: var(--cb-primary);
+  background-color: #fff;
+}
+
+.container input:checked ~ .checkmark,
+.container input:indeterminate ~ .checkmark {
+  background-color: var(--cb-primary);
+  border-color: var(--cb-primary);
+}
+
+.checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+  transition: all 0.1s ease;
+}
+
+.container input:checked ~ .checkmark:after,
+.container input:indeterminate ~ .checkmark:after {
+  display: block;
+}
+
+.container input:checked ~ .checkmark:after {
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--cb-mark-color);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  background-color: transparent;
+}
+
+.container input:indeterminate ~ .checkmark:after {
+  left: 4px;
+  top: 8px;
+  width: 10px;
+  height: 2px;
+  background-color: var(--cb-mark-color);
+  border: none;
+  transform: none;
+}
+
+.container input:disabled ~ .checkmark {
+  background-color: var(--cb-disabled-bg);
+  border-color: var(--cb-disabled-border);
+  cursor: not-allowed;
+}
+
+.container input:disabled ~ .label {
+  color: #999;
+  cursor: not-allowed;
+}
+
+.container input:disabled:checked ~ .checkmark:after,
+.container input:disabled:indeterminate ~ .checkmark:after {
+  background-color: var(--cb-disabled-mark);
+  border-color: var(--cb-disabled-mark);
+}

@@ -1,0 +1,9 @@
+#root {
+  width: 100%;
+}
+
+.app-root {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+}
