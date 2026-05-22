@@ -8,7 +8,7 @@ import type {
   PasswordResponseDto,
   ResponseError,
 } from 'shared-password-manager/api';
-import { useModal } from 'shared-password-manager/hooks';
+import { useModal, useOtp } from 'shared-password-manager/hooks';
 import {
   CheckboxView,
   ErrorBoxView,
@@ -101,6 +101,7 @@ function CurrentPassowrdView({
   const [error, setError] = useState<string | null>(null);
 
   const { activeModal, open, close } = useModal<'DELETE_CONFIRM'>();
+  const { otpTTL, otpMaxTTL } = useOtp();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -320,8 +321,8 @@ function CurrentPassowrdView({
             <div className={styles.otpContainer}>
               <h3>ABC 123</h3>
               <div className={styles.countdown}>
-                <ProgressbarView progress={20} max={30} />
-                <span>20s</span>
+                <ProgressbarView progress={otpTTL} max={otpMaxTTL} />
+                <span>{Math.ceil(otpTTL / 1000)}s</span>
               </div>
             </div>
           </>

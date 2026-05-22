@@ -4,6 +4,7 @@ import { AccountView, ExtraAction, ThemeSwitch } from 'shared-password-manager/u
 import PasswordView from '../../components/passwordview/PasswordView';
 import Sidebar from '../../components/sidebarview/SidebarView';
 import VaultView from '../../components/vaultview/VaultView';
+import { OtpProvider } from '../../providers/otp/OtpProvider';
 import { SidebarProvider } from '../../providers/sidebar/SidebarProvider';
 import styles from './HomePage.module.css';
 
@@ -25,7 +26,11 @@ export default function HomePage() {
         </SidebarProvider>
       )}
       {(!isMobile || (vaultId && !passwordId)) && <VaultView />}
-      {(!isMobile || passwordId) && <PasswordView />}
+      {(!isMobile || passwordId) && (
+        <OtpProvider>
+          <PasswordView />
+        </OtpProvider>
+      )}
     </div>
   );
 }
