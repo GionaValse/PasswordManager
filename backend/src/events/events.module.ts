@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { EventsService } from './events.service';
+import { OtpModule } from 'src/otp/otp.module';
 import { EventsGateway } from './events.gateway';
+import { EventsService } from './events.service';
 
 @Module({
+  imports: [OtpModule],
   providers: [EventsService, EventsGateway],
   exports: [EventsService],
 })

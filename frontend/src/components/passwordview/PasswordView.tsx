@@ -319,7 +319,7 @@ function CurrentPassowrdView({
           <>
             <div className="divider"></div>
             <div className={styles.otpContainer}>
-              <h3>ABC 123</h3>
+              <h3>{editData.otpCode}</h3>
               <div className={styles.countdown}>
                 <ProgressbarView progress={otpTTL} max={otpMaxTTL} />
                 <span>{Math.ceil(otpTTL / 1000)}s</span>

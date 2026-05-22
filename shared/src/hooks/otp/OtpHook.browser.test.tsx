@@ -32,6 +32,6 @@ describe('useOtp Custom Hook', () => {
   it('should throw an error when used outside of OtpContext', async () => {
     await expect(async () => {
       await renderHook(() => useOtp());
-    }).rejects.toThrow('useOtp must be used within OtpContext');
+    }).rejects.toThrow('useOtp must be used within an OtpContext');
   });
 });

@@ -11,7 +11,9 @@ vi.mock('react-responsive', () => ({
 }));
 
 vi.mock('../../components/sidebarview/SidebarView', () => ({
-  default: () => <div data-testid="sidebar">Sidebar</div>,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="sidebar">Sidebar {children}</div>
+  ),
 }));
 
 vi.mock('../../components/vaultview/VaultView', () => ({
@@ -20,6 +22,24 @@ vi.mock('../../components/vaultview/VaultView', () => ({
 
 vi.mock('../../components/passwordview/PasswordView', () => ({
   default: () => <div data-testid="password">Password</div>,
+}));
+
+vi.mock('../../providers/otp/OtpProvider', () => ({
+  OtpProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+vi.mock('../../providers/sidebar/SidebarProvider', () => ({
+  SidebarProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+vi.mock('shared-password-manager/ui', () => ({
+  AccountView: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="account-view">{children}</div>
+  ),
+  ExtraAction: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="extra-action">{children}</div>
+  ),
+  ThemeSwitch: () => <div data-testid="theme-switch">ThemeSwitch</div>,
 }));
 
 const queryClient = new QueryClient();

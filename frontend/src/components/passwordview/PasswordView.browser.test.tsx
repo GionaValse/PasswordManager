@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter, Route, Routes } from 'react-router';
+import * as hooks from 'shared-password-manager/hooks';
 import { QrCodeService } from 'shared-password-manager/utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
@@ -25,11 +26,17 @@ vi.mock('shared-password-manager/hooks', async (importOriginal) => {
   const actual = await importOriginal<typeof import('shared-password-manager/hooks')>();
   return {
     ...actual,
-    useModal: () => ({
+
+    useModal: vi.fn(() => ({
       activeModal: null,
       open: vi.fn(),
       close: vi.fn(),
-    }),
+    })),
+
+    useOtp: vi.fn(() => ({
+      otpTTL: 15000,
+      otpMaxTTL: 30000,
+    })),
   };
 });
 
@@ -65,7 +72,9 @@ describe('PasswordView Component', () => {
     username: 'user@test.com',
     website: 'https://google.com',
     password: 'password123',
+    otpCode: '',
     favorite: false,
+    haveOtp: false,
     creationDate: new Date(),
     modifiedDate: new Date(),
   };
@@ -181,5 +190,40 @@ describe('PasswordView Component', () => {
     await vi.waitFor(() => {
       expect(passwordsApi.passwordsControllerCreateOne).toHaveBeenCalled();
     });
+  });
+
+  it('should display OTP section when haveOtp is true and not in edit mode', async () => {
+    vi.mocked(passwordsApi.passwordsControllerFindOne).mockResolvedValue({
+      ...mockPassword,
+      otpCode: 'ABC 123',
+      haveOtp: true,
+    } as any);
+
+    await render(<Wrapper />);
+
+    await expect.element(page.getByRole('heading', { name: 'Google' })).toBeVisible();
+    await expect.element(page.getByRole('heading', { name: 'ABC 123' })).toBeVisible();
+    await expect.element(page.getByText('15s')).toBeVisible();
+  });
+
+  it('should trigger delete confirmation modal when delete action is clicked', async () => {
+    const mockOpen = vi.fn();
+
+    vi.mocked(hooks.useModal).mockReturnValue({
+      activeModal: null,
+      open: mockOpen,
+      close: vi.fn(),
+    });
+
+    vi.mocked(passwordsApi.passwordsControllerFindOne).mockResolvedValue(mockPassword as any);
+
+    await render(<Wrapper />);
+
+    await expect.element(page.getByRole('heading', { name: 'Google' })).toBeVisible();
+
+    const deleteBtn = page.getByTestId('test-password-delete-action');
+    await deleteBtn.click();
+
+    expect(mockOpen).toHaveBeenCalledWith('DELETE_CONFIRM');
   });
 });

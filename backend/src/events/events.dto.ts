@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsString } from 'class-validator';
+import { Socket } from 'socket.io';
+import { JwtPayload } from 'src/auth/auth.types';
 
 export class EventSessionDto {
   @ApiProperty({ example: 'session-12' })
@@ -19,4 +21,10 @@ export class EventSessionDto {
   @ApiProperty()
   @IsDate()
   connectedAt: Date;
+}
+
+export interface AuthenticatedSocket extends Socket {
+  data: {
+    user: JwtPayload;
+  };
 }

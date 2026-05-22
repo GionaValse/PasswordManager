@@ -1,5 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 
@@ -79,7 +79,7 @@ describe('Vaults & Passwords Flow (e2e)', () => {
         .set('Authorization', `Bearer ${jwtToken}`)
         .send({
           vaultId: '000000000000000000000000',
-          name: 'Netflix',
+          service: 'Netflix',
           username: 'user@netflix.com',
           password: 'password123',
           favorite: false,
@@ -93,7 +93,7 @@ describe('Vaults & Passwords Flow (e2e)', () => {
         .set('Authorization', `Bearer ${jwtToken}`)
         .send({
           vaultId: targetVaultId,
-          name: 'GitHub',
+          service: 'GitHub',
           website: 'https://github.com',
           username: 'dev_hero',
           password: 'SuperSecretGitHubPassword!',
@@ -102,7 +102,7 @@ describe('Vaults & Passwords Flow (e2e)', () => {
         .expect(201)
         .expect((res) => {
           expect(res.body.id).toBeDefined();
-          expect(res.body.name).toBe('GitHub');
+          expect(res.body.service).toBe('GitHub');
           expect(res.body.vaultId).toBe(targetVaultId);
 
           targetPasswordId = res.body.id;
@@ -117,7 +117,7 @@ describe('Vaults & Passwords Flow (e2e)', () => {
         .expect((res) => {
           expect(Array.isArray(res.body)).toBe(true);
           expect(res.body.length).toBe(1);
-          expect(res.body[0].name).toBe('GitHub');
+          expect(res.body[0].service).toBe('GitHub');
           expect(res.body[0].favorite).toBe(true);
         });
     });

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PasswordEntity } from './passwords.entity';
-import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
+import { MongoRepository } from 'typeorm';
+import { PasswordEntity } from './passwords.entity';
 
 @Injectable()
 export class PasswordsRepository {
@@ -39,6 +39,12 @@ export class PasswordsRepository {
   async findById(id: string): Promise<PasswordEntity | null> {
     return await this.repo.findOne({
       where: { _id: new ObjectId(id) },
+    });
+  }
+
+  async findOtps(): Promise<PasswordEntity[]> {
+    return await this.repo.find({
+      where: { haveOtp: true },
     });
   }
 

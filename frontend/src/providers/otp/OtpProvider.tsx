@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { OtpContext } from 'shared-password-manager/context';
 import { useSocket } from 'shared-password-manager/hooks';
 
@@ -14,25 +14,59 @@ export function OtpProvider({ children }: OtpProviderProps) {
   const { socket } = useSocket();
   const queryClient = useQueryClient();
 
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startLocalCountdown = useCallback(
+    (initialTtl: number) => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+
+      let currentTtl = initialTtl;
+      setOtpTTL(currentTtl);
+
+      timerRef.current = setInterval(() => {
+        currentTtl -= 100;
+
+        if (currentTtl <= 0) {
+          setOtpTTL(0);
+          if (timerRef.current) clearInterval(timerRef.current);
+
+          queryClient.invalidateQueries({ queryKey: ['passwords'] });
+          queryClient.invalidateQueries({ queryKey: ['password'] });
+        } else {
+          setOtpTTL(currentTtl);
+        }
+      }, 100);
+    },
+    [queryClient],
+  );
+
   useEffect(() => {
     if (!socket) return;
 
-    const handleOtpUpdate = ({ ttl, maxTtl }: { ttl: number; maxTtl: number }) => {
-      setOtpTTL(ttl);
+    const handleOtpSynchronize = ({ ttl, maxTtl }: { ttl: number; maxTtl: number }) => {
+      setOtpMaxTTL(maxTtl);
+      startLocalCountdown(ttl);
+    };
+
+    const handleOtpRotated = ({ maxTtl }: { maxTtl: number }) => {
       setOtpMaxTTL(maxTtl);
 
-      if (ttl <= 0 && queryClient) {
-        // Invalidate OTP-related queries when the OTP expires
-        queryClient.invalidateQueries({ queryKey: ['passwords'] });
-      }
+      startLocalCountdown(maxTtl);
     };
 
-    socket.on('otp-update', handleOtpUpdate);
+    socket.on('otp_syncronize', handleOtpSynchronize);
+    socket.on('otp_rotated', handleOtpRotated);
 
     return () => {
-      socket.off('otp-update', handleOtpUpdate);
+      socket.off('otp_syncronize', handleOtpSynchronize);
+      socket.off('otp_rotated', handleOtpRotated);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     };
-  }, [socket, queryClient]);
+  }, [socket, startLocalCountdown]);
 
   return <OtpContext.Provider value={{ otpTTL, otpMaxTTL }}>{children}</OtpContext.Provider>;
 }

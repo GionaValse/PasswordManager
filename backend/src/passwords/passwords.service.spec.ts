@@ -23,6 +23,7 @@ describe('PasswordsService', () => {
       findAllByVaultId: jest.fn(),
       findById: jest.fn(),
       remove: jest.fn(),
+      findOtps: jest.fn(),
     };
 
     vaultsRepo = {
@@ -42,7 +43,6 @@ describe('PasswordsService', () => {
   });
 
   afterEach(() => {
-    // Pulisce la memoria delle chiamate ai mock dopo ogni test
     jest.clearAllMocks();
   });
 
@@ -56,8 +56,10 @@ describe('PasswordsService', () => {
       service: 'Netflix',
       username: 'mario_rossi',
       password: 'SuperSecretPassword!',
+      otpCode: '',
       website: 'https://netflix.com',
       favorite: false,
+      haveOtp: false,
     };
 
     it('should create and return a password if the vault exists', async () => {
@@ -150,6 +152,23 @@ describe('PasswordsService', () => {
     });
   });
 
+  describe('findOtps', () => {
+    it('should return all passwords that have active OTPs', async () => {
+      const mockPassword = new PasswordEntity();
+      mockPassword._id = new ObjectId();
+      mockPassword.haveOtp = true;
+      mockPassword.otpCode = '123456';
+
+      passwordsRepo.findOtps.mockResolvedValue([mockPassword]);
+
+      const result = await service.findOtps();
+
+      expect(passwordsRepo.findOtps).toHaveBeenCalled();
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe(mockPassword._id.toString());
+    });
+  });
+
   describe('findOneSecure (and findOne)', () => {
     const mockPasswordId = new ObjectId().toString();
 
@@ -228,6 +247,34 @@ describe('PasswordsService', () => {
       const result = await service.updateFavorite(mockPasswordId, mockUserId, true);
 
       expect(result.favorite).toBe(true);
+    });
+  });
+
+  describe('updateOtpCode', () => {
+    const mockPasswordId = new ObjectId().toString();
+
+    it('should update the OTP code for a password from system execution without user validation', async () => {
+      const mockPassword = new PasswordEntity();
+      mockPassword._id = new ObjectId(mockPasswordId);
+      mockPassword.otpCode = 'OLD_CODE';
+
+      passwordsRepo.findById.mockResolvedValue(mockPassword);
+      passwordsRepo.save.mockImplementation(async (entity) => entity);
+
+      const result = await service.updateOtpCode(mockPasswordId, 'NEW_CODE');
+
+      expect(passwordsRepo.findById).toHaveBeenCalledWith(mockPasswordId);
+      expect(passwordsRepo.save).toHaveBeenCalled();
+      expect(result.otpCode).toBe('NEW_CODE');
+    });
+
+    it('should throw NotFoundException if trying to update an OTP code for a non-existent password', async () => {
+      passwordsRepo.findById.mockResolvedValue(null);
+
+      await expect(service.updateOtpCode(mockPasswordId, 'NEW_CODE')).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(passwordsRepo.save).not.toHaveBeenCalled();
     });
   });
 

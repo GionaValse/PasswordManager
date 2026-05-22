@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { PasswordCreateDto, PasswordResponseDto, PasswordUpdateDto } from './passwords.dto';
-import { PasswordsRepository } from './passwords.repository';
 import { VaultsRepository } from 'src/vaults/vaults.repository';
+import { PasswordCreateDto, PasswordResponseDto, PasswordUpdateDto } from './passwords.dto';
 import { PasswordEntity } from './passwords.entity';
+import { PasswordsRepository } from './passwords.repository';
 
 @Injectable()
 export class PasswordsService {
@@ -57,6 +57,11 @@ export class PasswordsService {
     return favorites.map((p) => this.parseDto(p));
   }
 
+  async findOtps(): Promise<PasswordResponseDto[]> {
+    const otps = await this.repo.findOtps();
+    return otps.map((p) => this.parseDto(p));
+  }
+
   async findOne(id: string, userId: string): Promise<PasswordResponseDto> {
     const findedPassword = await this.findOneSecure(id, userId);
     return this.parseDto(findedPassword);
@@ -86,6 +91,19 @@ export class PasswordsService {
     isFavorite: boolean,
   ): Promise<PasswordResponseDto> {
     return this.updateOne(id, userId, false, { favorite: isFavorite });
+  }
+
+  async updateOtpCode(id: string, otpCode: string): Promise<PasswordResponseDto> {
+    const findedPassword = await this.repo.findById(id);
+
+    if (!findedPassword) {
+      throw new NotFoundException('Password not found');
+    }
+
+    findedPassword.otpCode = otpCode;
+
+    const saved = await this.repo.save(findedPassword);
+    return this.parseDto(saved);
   }
 
   async deleteOne(id: string, userId: string): Promise<PasswordResponseDto> {
