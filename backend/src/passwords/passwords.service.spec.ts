@@ -28,6 +28,7 @@ describe('PasswordsService', () => {
 
     vaultsRepo = {
       findById: jest.fn(),
+      findByIdAndUser: jest.fn(),
       findAll: jest.fn(),
     };
 
@@ -62,8 +63,8 @@ describe('PasswordsService', () => {
       haveOtp: false,
     };
 
-    it('should create and return a password if the vault exists', async () => {
-      vaultsRepo.findById.mockResolvedValue({
+    it('should create and return a password if the vault exists and belongs to user', async () => {
+      vaultsRepo.findByIdAndUser.mockResolvedValue({
         _id: new ObjectId(),
       } as any);
 
@@ -77,13 +78,13 @@ describe('PasswordsService', () => {
 
       const result = await service.createOne(createDto, mockUserId);
 
-      expect(vaultsRepo.findById).toHaveBeenCalledWith(mockVaultId, mockUserId);
+      expect(vaultsRepo.findByIdAndUser).toHaveBeenCalledWith(mockVaultId, mockUserId);
       expect(passwordsRepo.save).toHaveBeenCalled();
       expect(result.id).toEqual(savedEntity._id.toString());
     });
 
-    it('should throw NotFoundException if vault does not exist', async () => {
-      vaultsRepo.findById.mockResolvedValue(null);
+    it('should throw NotFoundException if vault does not exist or does not belong to user', async () => {
+      vaultsRepo.findByIdAndUser.mockResolvedValue(null);
 
       await expect(service.createOne(createDto, mockUserId)).rejects.toThrow(NotFoundException);
       expect(passwordsRepo.save).not.toHaveBeenCalled();
@@ -116,14 +117,14 @@ describe('PasswordsService', () => {
   });
 
   describe('findByVault', () => {
-    it('should throw a NotFoundException if vault does not exist', async () => {
-      vaultsRepo.findById.mockResolvedValue(null);
+    it('should throw a NotFoundException if vault does not exist or belong to user', async () => {
+      vaultsRepo.findByIdAndUser.mockResolvedValue(null);
 
       await expect(service.findByVault(mockVaultId, mockUserId)).rejects.toThrow(NotFoundException);
     });
 
-    it('should return passwords for a specific valid vault', async () => {
-      vaultsRepo.findById.mockResolvedValue({
+    it('should return passwords for a specific valid vault owned by user', async () => {
+      vaultsRepo.findByIdAndUser.mockResolvedValue({
         _id: new ObjectId(),
       } as any);
       const mockPassword = new PasswordEntity();
@@ -183,7 +184,8 @@ describe('PasswordsService', () => {
       mockPassword.vaultId = mockVaultId;
 
       passwordsRepo.findById.mockResolvedValue(mockPassword);
-      vaultsRepo.findById.mockResolvedValue(null);
+
+      vaultsRepo.findByIdAndUser.mockResolvedValue(null);
 
       await expect(service.findOne(mockPasswordId, mockUserId)).rejects.toThrow(
         UnauthorizedException,
@@ -196,7 +198,8 @@ describe('PasswordsService', () => {
       mockPassword.vaultId = mockVaultId;
 
       passwordsRepo.findById.mockResolvedValue(mockPassword);
-      vaultsRepo.findById.mockResolvedValue({
+
+      vaultsRepo.findByIdAndUser.mockResolvedValue({
         _id: new ObjectId(),
       } as any);
 
@@ -215,7 +218,8 @@ describe('PasswordsService', () => {
       mockPassword.vaultId = mockVaultId;
 
       passwordsRepo.findById.mockResolvedValue(mockPassword);
-      vaultsRepo.findById.mockResolvedValue({
+
+      vaultsRepo.findByIdAndUser.mockResolvedValue({
         _id: new ObjectId(),
       } as any);
       passwordsRepo.save.mockImplementation(async (entity) => entity);
@@ -239,7 +243,8 @@ describe('PasswordsService', () => {
       mockPassword.favorite = false;
 
       passwordsRepo.findById.mockResolvedValue(mockPassword);
-      vaultsRepo.findById.mockResolvedValue({
+
+      vaultsRepo.findByIdAndUser.mockResolvedValue({
         _id: new ObjectId(),
       } as any);
       passwordsRepo.save.mockImplementation(async (entity) => entity);
@@ -287,7 +292,8 @@ describe('PasswordsService', () => {
       mockPassword.vaultId = mockVaultId;
 
       passwordsRepo.findById.mockResolvedValue(mockPassword);
-      vaultsRepo.findById.mockResolvedValue({
+
+      vaultsRepo.findByIdAndUser.mockResolvedValue({
         _id: new ObjectId(),
       } as any);
       passwordsRepo.remove.mockResolvedValue(mockPassword);

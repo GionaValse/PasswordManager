@@ -13,7 +13,7 @@
 .progressbarTrack {
   height: 100%;
   border-radius: 3px;
-  transition: width 0.3s ease-in-out;
+  transition: width 0.05s ease-in-out;
 }
 
 .progressbarFill {

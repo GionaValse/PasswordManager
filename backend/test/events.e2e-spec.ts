@@ -10,6 +10,7 @@ import { AppModule } from './../src/app.module';
 describe('Events Gateway (e2e)', () => {
   let app: INestApplication;
   let jwtToken: string;
+  let currentUserId: string;
 
   let device1: Socket;
   let device2: Socket;
@@ -36,6 +37,9 @@ describe('Events Gateway (e2e)', () => {
       .expect(201);
 
     jwtToken = res.body.accessToken;
+
+    const decodedToken = JSON.parse(Buffer.from(jwtToken.split('.')[1], 'base64').toString());
+    currentUserId = decodedToken.sub;
   });
 
   afterAll(async () => {
@@ -149,7 +153,8 @@ describe('Events Gateway (e2e)', () => {
 
       device1.on('connect', () => {
         device1.on('otp_rotated', (data) => {
-          expect(data.message).toBe('OTP codes have been rotated.');
+          expect(data.codes).toBeDefined();
+          expect(data.codes['pass-1']).toBe('AB1234');
           expect(data.maxTtl).toBeDefined();
           expect(data.time).toBeDefined();
 
@@ -158,7 +163,11 @@ describe('Events Gateway (e2e)', () => {
         });
 
         const eventEmitter = app.get(EventEmitter2);
-        eventEmitter.emit('otp.rotated', { maxTtl: 30000 });
+        eventEmitter.emit('otp.rotated', {
+          maxTtl: 30000,
+          userId: currentUserId,
+          codes: { 'pass-1': 'AB1234' },
+        });
       });
 
       device1.connect();

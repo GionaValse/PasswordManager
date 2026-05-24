@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { VaultsService } from './vaults.service';
-import { VaultsRepository } from './vaults.repository';
 import { NotFoundException } from '@nestjs/common';
-import { VaultCreateDto } from './vaults.dto';
+import { Test, TestingModule } from '@nestjs/testing';
 import { ObjectId } from 'mongodb';
+import { VaultCreateDto } from './vaults.dto';
 import { VaultEntity } from './vaults.entity';
+import { VaultsRepository } from './vaults.repository';
+import { VaultsService } from './vaults.service';
 
 jest.mock('../tools/color', () => ({
   generateColor: jest.fn(() => '#DEFAULT_MOCK_COLOR'),
@@ -22,6 +22,7 @@ describe('VaultsService', () => {
       save: jest.fn(),
       findAll: jest.fn(),
       findById: jest.fn(),
+      findByIdAndUser: jest.fn(),
       remove: jest.fn(),
     };
 
@@ -87,27 +88,49 @@ describe('VaultsService', () => {
   });
 
   describe('findOne', () => {
-    it('should return a vault if it exists and belongs to user', async () => {
+    it('should return a vault by ID only (System bypass)', async () => {
       const mockVault = new VaultEntity();
       mockVault._id = new ObjectId(mockVaultId);
       repo.findById.mockResolvedValue(mockVault);
 
-      const result = await service.findOne(mockVaultId, mockUserId);
+      const result = await service.findOne(mockVaultId);
 
-      expect(repo.findById).toHaveBeenCalledWith(mockVaultId, mockUserId);
+      expect(repo.findById).toHaveBeenCalledWith(mockVaultId);
       expect(result.id).toBe(mockVaultId);
     });
 
-    it('should throw NotFoundException if vault does not exist', async () => {
+    it('should throw NotFoundException if vault does not exist (System bypass)', async () => {
       repo.findById.mockResolvedValue(null);
 
-      await expect(service.findOne(mockVaultId, mockUserId)).rejects.toThrow(NotFoundException);
+      await expect(service.findOne(mockVaultId)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('findOneWithUser', () => {
+    it('should return a vault if it exists and belongs to user', async () => {
+      const mockVault = new VaultEntity();
+      mockVault._id = new ObjectId(mockVaultId);
+
+      repo.findByIdAndUser.mockResolvedValue(mockVault);
+
+      const result = await service.findOneWithUser(mockVaultId, mockUserId);
+
+      expect(repo.findByIdAndUser).toHaveBeenCalledWith(mockVaultId, mockUserId);
+      expect(result.id).toBe(mockVaultId);
+    });
+
+    it('should throw NotFoundException if vault does not exist or does not belong to user', async () => {
+      repo.findByIdAndUser.mockResolvedValue(null);
+
+      await expect(service.findOneWithUser(mockVaultId, mockUserId)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
   describe('updateOne', () => {
-    it('should throw NotFoundException if vault does not exist', async () => {
-      repo.findById.mockResolvedValue(null);
+    it('should throw NotFoundException if vault does not exist or does not belong to user', async () => {
+      repo.findByIdAndUser.mockResolvedValue(null);
 
       await expect(service.updateOne(mockVaultId, mockUserId, {})).rejects.toThrow(
         NotFoundException,
@@ -119,7 +142,7 @@ describe('VaultsService', () => {
       mockVault._id = new ObjectId(mockVaultId);
       mockVault.name = 'Old Name';
 
-      repo.findById.mockResolvedValue(mockVault);
+      repo.findByIdAndUser.mockResolvedValue(mockVault);
       repo.save.mockImplementation(async (entity) => entity);
 
       const result = await service.updateOne(mockVaultId, mockUserId, {
@@ -132,8 +155,8 @@ describe('VaultsService', () => {
   });
 
   describe('deleteOne', () => {
-    it('should throw NotFoundException if vault does not exist', async () => {
-      repo.findById.mockResolvedValue(null);
+    it('should throw NotFoundException if vault does not exist or does not belong to user', async () => {
+      repo.findByIdAndUser.mockResolvedValue(null);
 
       await expect(service.deleteOne(mockVaultId, mockUserId)).rejects.toThrow(NotFoundException);
     });
@@ -142,7 +165,7 @@ describe('VaultsService', () => {
       const mockVault = new VaultEntity();
       mockVault._id = new ObjectId(mockVaultId);
 
-      repo.findById.mockResolvedValue(mockVault);
+      repo.findByIdAndUser.mockResolvedValue(mockVault);
       repo.remove.mockResolvedValue(mockVault);
 
       const result = await service.deleteOne(mockVaultId, mockUserId);

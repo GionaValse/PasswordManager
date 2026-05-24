@@ -9,6 +9,8 @@ import { OtpProvider } from './OtpProvider';
 const mockSocket = {
   on: vi.fn(),
   off: vi.fn(),
+  emit: vi.fn(),
+  connected: true,
 };
 
 vi.mock('shared-password-manager/hooks', () => ({
@@ -30,10 +32,14 @@ describe('OtpProvider Browser Tests', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockSocket.connected = true;
+
     queryClient = new QueryClient({
       defaultOptions: { queries: { retry: false } },
     });
+
     vi.spyOn(queryClient, 'invalidateQueries');
+    vi.spyOn(queryClient, 'setQueryData');
   });
 
   afterEach(() => {
@@ -50,7 +56,7 @@ describe('OtpProvider Browser Tests', () => {
     );
   };
 
-  const emitSocketEvent = (eventName: string, data: any) => {
+  const emitSocketEvent = (eventName: string, data?: any) => {
     const onCall = mockSocket.on.mock.calls.find((call) => call[0] === eventName);
     const callback = onCall?.[1];
     if (callback) callback(data);
@@ -65,12 +71,42 @@ describe('OtpProvider Browser Tests', () => {
     await expect.element(page.getByTestId('ttl-value')).toHaveTextContent('12000');
   });
 
-  it('should restart from zero when receiving the global pulse (otp_rotated)', async () => {
+  it('should restart from zero and update cache when receiving the global pulse (otp_rotated)', async () => {
     await renderProvider();
 
-    emitSocketEvent('otp_rotated', { maxTtl: 30000 });
+    emitSocketEvent('otp_rotated', {
+      maxTtl: 30000,
+      codes: { 'pass-1': 'AB1234' },
+    });
 
     await expect.element(page.getByTestId('max-ttl-value')).toHaveTextContent('30000');
     await expect.element(page.getByTestId('ttl-value')).toHaveTextContent('30000');
+
+    expect(queryClient.setQueryData).toHaveBeenCalledWith(
+      ['password', 'pass-1'],
+      expect.any(Function),
+    );
+    expect(queryClient.invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ['passwords'],
+      refetchType: 'none',
+    });
+  });
+
+  it('should emit request_otp_sync on mount if socket is already connected', async () => {
+    mockSocket.connected = true;
+    await renderProvider();
+
+    expect(mockSocket.emit).toHaveBeenCalledWith('request_otp_sync');
+  });
+
+  it('should emit request_otp_sync only after connection if initially disconnected', async () => {
+    mockSocket.connected = false;
+    await renderProvider();
+
+    expect(mockSocket.emit).not.toHaveBeenCalledWith('request_otp_sync');
+
+    emitSocketEvent('connect');
+
+    expect(mockSocket.emit).toHaveBeenCalledWith('request_otp_sync');
   });
 });

@@ -195,15 +195,58 @@ describe('PasswordView Component', () => {
   it('should display OTP section when haveOtp is true and not in edit mode', async () => {
     vi.mocked(passwordsApi.passwordsControllerFindOne).mockResolvedValue({
       ...mockPassword,
-      otpCode: 'ABC 123',
+      otpCode: 'ABC123',
       haveOtp: true,
     } as any);
 
     await render(<Wrapper />);
 
     await expect.element(page.getByRole('heading', { name: 'Google' })).toBeVisible();
-    await expect.element(page.getByRole('heading', { name: 'ABC 123' })).toBeVisible();
+    await expect.element(page.getByRole('heading', { name: 'ABC123' })).toBeVisible();
     await expect.element(page.getByText('15s')).toBeVisible();
+  });
+
+  it('should update displayed OTP code reactively when React Query cache is updated by socket', async () => {
+    vi.mocked(passwordsApi.passwordsControllerFindOne).mockResolvedValue({
+      ...mockPassword,
+      haveOtp: true,
+      otpCode: 'OLD123',
+    } as any);
+
+    await render(<Wrapper />);
+
+    await expect.element(page.getByRole('heading', { name: 'Google' })).toBeVisible();
+    await expect.element(page.getByRole('heading', { name: 'OLD123' })).toBeVisible();
+
+    queryClient.setQueryData(['password', 'p1'], {
+      ...mockPassword,
+      haveOtp: true,
+      otpCode: 'NEW456',
+    });
+
+    await expect.element(page.getByRole('heading', { name: 'NEW456' })).toBeVisible();
+    await expect.element(page.getByRole('heading', { name: 'OLD123' })).not.toBeInTheDocument();
+  });
+
+  it('should NOT overwrite user typed inputs if cache updates while in edit mode', async () => {
+    vi.mocked(passwordsApi.passwordsControllerFindOne).mockResolvedValue(mockPassword as any);
+
+    await render(<Wrapper />);
+    await expect.element(page.getByRole('heading', { name: 'Google' })).toBeVisible();
+
+    const editBtn = page.getByTestId('test-password-edit-action');
+    await editBtn.click();
+
+    const serviceInput = page.getByTestId('test-service-input');
+    await serviceInput.fill('Google Personal');
+
+    queryClient.setQueryData(['password', 'p1'], {
+      ...mockPassword,
+      service: 'Google Changed By Server',
+      otpCode: '123456',
+    });
+
+    await expect.element(serviceInput).toHaveValue('Google Personal');
   });
 
   it('should trigger delete confirmation modal when delete action is clicked', async () => {

@@ -13,6 +13,7 @@ import {
 import { Namespace } from 'socket.io';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { JwtPayload } from 'src/auth/auth.types';
+import { OtpEventDto, OtpResponseDto } from 'src/otp/otp.dto';
 import { OtpService } from 'src/otp/otp.service';
 import { type AuthenticatedSocket } from './events.dto';
 import { EventsService } from './events.service';
@@ -141,12 +142,24 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return { status: 'success', message: 'Logged out from all devices' };
   }
 
+  @SubscribeMessage('request_otp_sync')
+  handleRequestOtpSync(@ConnectedSocket() client: AuthenticatedSocket) {
+    const otpStatus = this.otpService.getInitialStatus();
+    client.emit('otp_syncronize', otpStatus);
+  }
+
   @OnEvent('otp.rotated')
-  handleOtpRotatedEvent(payload: { maxTtl: number }) {
-    this.server.emit('otp_rotated', {
-      message: 'OTP codes have been rotated.',
-      maxTtl: payload.maxTtl,
-      time: new Date(),
+  handleOtpRotatedEvent({ maxTtl, userId, codes }: OtpEventDto) {
+    const userSockets = this.eventsService.getUserSockets(userId);
+
+    userSockets.forEach((socketId) => {
+      const otpResponseData: OtpResponseDto = {
+        maxTtl,
+        codes,
+        time: new Date(),
+      };
+
+      this.server.to(socketId).emit('otp_rotated', otpResponseData);
     });
   }
 }

@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { VaultsService } from './vaults.service';
-import { VaultCreateDto, VaultResponseDto, VaultUpdateDto } from './vaults.dto';
-import { PasswordsService } from 'src/passwords/passwords.service';
-import { PasswordResponseDto } from 'src/passwords/passwords.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { GetUser } from 'src/auth/auth.decorator';
-import { JwtPayload } from 'src/auth/auth.types';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { GetUser } from 'src/auth/auth.decorator';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { JwtPayload } from 'src/auth/auth.types';
+import { PasswordResponseDto } from 'src/passwords/passwords.dto';
+import { PasswordsService } from 'src/passwords/passwords.service';
+import { VaultCreateDto, VaultResponseDto, VaultUpdateDto } from './vaults.dto';
+import { VaultsService } from './vaults.service';
 
 @ApiTags('Vaults')
 @ApiBearerAuth()
@@ -40,7 +40,7 @@ export class VaultsController {
   @ApiParam({ name: 'id', description: 'Vault UUID' })
   @ApiResponse({ status: 200, type: VaultResponseDto })
   async findOne(@Param('id') id: string, @GetUser() user: JwtPayload): Promise<VaultResponseDto> {
-    return this.vaultsService.findOne(id, user.sub);
+    return this.vaultsService.findOneWithUser(id, user.sub);
   }
 
   @Get(':vaultId/passwords')

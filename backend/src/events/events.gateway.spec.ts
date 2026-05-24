@@ -199,17 +199,39 @@ describe('EventsGateway', () => {
     });
   });
 
+  describe('handleRequestOtpSync', () => {
+    it('should emit the current OTP synchronization status to the requesting client', () => {
+      const client = createMockClient('socket-1');
+
+      gateway.handleRequestOtpSync(client);
+
+      expect(otpService.getInitialStatus).toHaveBeenCalled();
+      expect(client.emit).toHaveBeenCalledWith('otp_syncronize', mockOtpStatus);
+    });
+  });
+
   describe('handleOtpRotatedEvent', () => {
-    it('should broadcast otp_rotated event to all connected clients', () => {
-      const mockPayloadEventEmitter = { maxTtl: 30000 };
+    it('should emit otp_rotated event with private codes only to the specific user connected clients', () => {
+      const mockPayloadEventEmitter = {
+        maxTtl: 30000,
+        userId: mockUserId,
+        codes: { 'pass-1': 'AB1234' },
+      };
+
+      eventsService.getUserSockets.mockReturnValue(['socket-1', 'socket-2']);
 
       gateway.handleOtpRotatedEvent(mockPayloadEventEmitter);
+
+      expect(eventsService.getUserSockets).toHaveBeenCalledWith(mockUserId);
+
+      expect(mockServer.to).toHaveBeenCalledWith('socket-1');
+      expect(mockServer.to).toHaveBeenCalledWith('socket-2');
 
       expect(mockServer.emit).toHaveBeenCalledWith(
         'otp_rotated',
         expect.objectContaining({
-          message: 'OTP codes have been rotated.',
           maxTtl: 30000,
+          codes: { 'pass-1': 'AB1234' },
           time: expect.any(Date),
         }),
       );

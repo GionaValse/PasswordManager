@@ -12,7 +12,7 @@ export class PasswordsService {
   ) {}
 
   async createOne(passwordDto: PasswordCreateDto, userId: string): Promise<PasswordResponseDto> {
-    const vault = await this.vaultRepo.findById(passwordDto.vaultId, userId);
+    const vault = await this.vaultRepo.findByIdAndUser(passwordDto.vaultId, userId);
 
     if (!vault) {
       throw new NotFoundException(`Vault with ID ${passwordDto.vaultId} not found`);
@@ -38,7 +38,7 @@ export class PasswordsService {
   }
 
   async findByVault(vaultId: string, userId: string): Promise<PasswordResponseDto[]> {
-    const vault = await this.vaultRepo.findById(vaultId, userId);
+    const vault = await this.vaultRepo.findByIdAndUser(vaultId, userId);
     if (!vault) {
       throw new NotFoundException(`Vault with ID ${vaultId} not found`);
     }
@@ -131,7 +131,7 @@ export class PasswordsService {
       throw new NotFoundException('Password not found');
     }
 
-    const vault = await this.vaultRepo.findById(findedPassword.vaultId, userId);
+    const vault = await this.vaultRepo.findByIdAndUser(findedPassword.vaultId, userId);
     if (!vault) {
       throw new UnauthorizedException('Access denied to this password');
     }

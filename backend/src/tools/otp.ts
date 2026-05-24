@@ -3,8 +3,9 @@ import * as crypto from 'crypto';
 export function rotateOtpCode(passwordId: string, expiration: number): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const otpLength = 6;
+  const expiredIn = Date.now() + expiration;
 
-  const saltData = `${passwordId}:${expiration}`;
+  const saltData = `${passwordId}:${expiredIn}`;
   const hash = crypto.createHash('sha256').update(saltData).digest('hex');
 
   let otpCode = '';
