@@ -24,7 +24,7 @@ describe('VaultsController', () => {
     vaultsService = {
       createOne: jest.fn(),
       findAll: jest.fn(),
-      findOne: jest.fn(),
+      findOneWithUser: jest.fn(),
       updateOne: jest.fn(),
       deleteOne: jest.fn(),
     };
@@ -89,11 +89,11 @@ describe('VaultsController', () => {
         id: mockVaultId,
         name: 'Work',
       } as VaultResponseDto;
-      vaultsService.findOne.mockResolvedValue(expectedResult);
+      vaultsService.findOneWithUser.mockResolvedValue(expectedResult);
 
       const result = await controller.findOne(mockVaultId, mockUser as any);
 
-      expect(vaultsService.findOne).toHaveBeenCalledWith(mockVaultId, mockUserId);
+      expect(vaultsService.findOneWithUser).toHaveBeenCalledWith(mockVaultId, mockUserId);
       expect(result).toEqual(expectedResult);
     });
   });

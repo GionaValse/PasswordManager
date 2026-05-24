@@ -51,10 +51,22 @@ export interface PasswordUpdateDto {
     password?: string;
     /**
      * 
+     * @type {string}
+     * @memberof PasswordUpdateDto
+     */
+    otpCode?: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof PasswordUpdateDto
      */
     favorite?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PasswordUpdateDto
+     */
+    haveOtp?: boolean;
 }
 
 /**
@@ -79,7 +91,9 @@ export function PasswordUpdateDtoFromJSONTyped(json: any, ignoreDiscriminator: b
         'website': json['website'] == null ? undefined : json['website'],
         'username': json['username'] == null ? undefined : json['username'],
         'password': json['password'] == null ? undefined : json['password'],
+        'otpCode': json['otpCode'] == null ? undefined : json['otpCode'],
         'favorite': json['favorite'] == null ? undefined : json['favorite'],
+        'haveOtp': json['haveOtp'] == null ? undefined : json['haveOtp'],
     };
 }
 
@@ -99,7 +113,9 @@ export function PasswordUpdateDtoToJSONTyped(value?: PasswordUpdateDto | null, i
         'website': value['website'],
         'username': value['username'],
         'password': value['password'],
+        'otpCode': value['otpCode'],
         'favorite': value['favorite'],
+        'haveOtp': value['haveOtp'],
     };
 }
 

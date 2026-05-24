@@ -1,5 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { OtpService } from 'src/otp/otp.service';
 import { EventsGateway } from './events.gateway';
 import { EventsService } from './events.service';
 
@@ -7,9 +8,11 @@ describe('EventsGateway', () => {
   let gateway: EventsGateway;
   let eventsService: jest.Mocked<Partial<EventsService>>;
   let jwtService: jest.Mocked<Partial<JwtService>>;
+  let otpService: jest.Mocked<Partial<OtpService>>;
 
   const mockUserId = 'user-123';
   const mockPayload = { sub: mockUserId };
+  const mockOtpStatus = { ttl: 15000, maxTtl: 30000 };
 
   const createMockClient = (id: string, token?: string) =>
     ({
@@ -42,11 +45,16 @@ describe('EventsGateway', () => {
       verify: jest.fn(),
     };
 
+    otpService = {
+      getInitialStatus: jest.fn().mockReturnValue(mockOtpStatus),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         EventsGateway,
         { provide: EventsService, useValue: eventsService },
         { provide: JwtService, useValue: jwtService },
+        { provide: OtpService, useValue: otpService },
       ],
     }).compile();
 
@@ -85,10 +93,9 @@ describe('EventsGateway', () => {
       expect(client.disconnect).toHaveBeenCalled();
     });
 
-    it('should authenticate, add session, and notify other sockets', () => {
+    it('should authenticate, add session, notify other sockets, and sync OTP', () => {
       const client = createMockClient('socket-1', 'valid-token');
       jwtService.verify.mockReturnValue(mockPayload as any);
-
       eventsService.getUserSockets.mockReturnValue(['socket-old']);
 
       gateway.handleConnection(client);
@@ -102,6 +109,9 @@ describe('EventsGateway', () => {
 
       expect(mockServer.to).toHaveBeenCalledWith('socket-old');
       expect(mockServer.emit).toHaveBeenCalledWith('new_session_alert', expect.any(Object));
+
+      expect(otpService.getInitialStatus).toHaveBeenCalled();
+      expect(client.emit).toHaveBeenCalledWith('otp_syncronize', mockOtpStatus);
     });
   });
 
@@ -186,6 +196,45 @@ describe('EventsGateway', () => {
 
       expect(eventsService.clearAllUserSessions).toHaveBeenCalledWith(mockUserId);
       expect(result.status).toBe('success');
+    });
+  });
+
+  describe('handleRequestOtpSync', () => {
+    it('should emit the current OTP synchronization status to the requesting client', () => {
+      const client = createMockClient('socket-1');
+
+      gateway.handleRequestOtpSync(client);
+
+      expect(otpService.getInitialStatus).toHaveBeenCalled();
+      expect(client.emit).toHaveBeenCalledWith('otp_syncronize', mockOtpStatus);
+    });
+  });
+
+  describe('handleOtpRotatedEvent', () => {
+    it('should emit otp_rotated event with private codes only to the specific user connected clients', () => {
+      const mockPayloadEventEmitter = {
+        maxTtl: 30000,
+        userId: mockUserId,
+        codes: { 'pass-1': 'AB1234' },
+      };
+
+      eventsService.getUserSockets.mockReturnValue(['socket-1', 'socket-2']);
+
+      gateway.handleOtpRotatedEvent(mockPayloadEventEmitter);
+
+      expect(eventsService.getUserSockets).toHaveBeenCalledWith(mockUserId);
+
+      expect(mockServer.to).toHaveBeenCalledWith('socket-1');
+      expect(mockServer.to).toHaveBeenCalledWith('socket-2');
+
+      expect(mockServer.emit).toHaveBeenCalledWith(
+        'otp_rotated',
+        expect.objectContaining({
+          maxTtl: 30000,
+          codes: { 'pass-1': 'AB1234' },
+          time: expect.any(Date),
+        }),
+      );
     });
   });
 });

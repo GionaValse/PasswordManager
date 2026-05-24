@@ -1,3 +1,6 @@
+import { UseGuards } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import {
   ConnectedSocket,
   MessageBody,
@@ -7,18 +10,13 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Namespace, Socket } from 'socket.io';
-import { EventsService } from './events.service';
-import { UseGuards } from '@nestjs/common';
+import { Namespace } from 'socket.io';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/auth/auth.types';
-
-export interface AuthenticatedSocket extends Socket {
-  data: {
-    user: JwtPayload;
-  };
-}
+import { OtpEventDto, OtpResponseDto } from 'src/otp/otp.dto';
+import { OtpService } from 'src/otp/otp.service';
+import { type AuthenticatedSocket } from './events.dto';
+import { EventsService } from './events.service';
 
 @UseGuards(AuthGuard)
 @WebSocketGateway(parseInt(process.env.WS_PORT || '3001', 10), {
@@ -32,6 +30,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private jwtService: JwtService,
     private readonly eventsService: EventsService,
+    private readonly otpService: OtpService,
   ) {}
 
   handleConnection(@ConnectedSocket() client: AuthenticatedSocket) {
@@ -63,6 +62,9 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
           time: new Date(),
         });
       });
+
+      const otpStatus = this.otpService.getInitialStatus();
+      client.emit('otp_syncronize', otpStatus);
     } catch (e: unknown) {
       console.error('Invalid token: ', e);
       client.emit('error', 'unauthorized');
@@ -138,5 +140,26 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.eventsService.clearAllUserSessions(user.sub);
     return { status: 'success', message: 'Logged out from all devices' };
+  }
+
+  @SubscribeMessage('request_otp_sync')
+  handleRequestOtpSync(@ConnectedSocket() client: AuthenticatedSocket) {
+    const otpStatus = this.otpService.getInitialStatus();
+    client.emit('otp_syncronize', otpStatus);
+  }
+
+  @OnEvent('otp.rotated')
+  handleOtpRotatedEvent({ maxTtl, userId, codes }: OtpEventDto) {
+    const userSockets = this.eventsService.getUserSockets(userId);
+
+    userSockets.forEach((socketId) => {
+      const otpResponseData: OtpResponseDto = {
+        maxTtl,
+        codes,
+        time: new Date(),
+      };
+
+      this.server.to(socketId).emit('otp_rotated', otpResponseData);
+    });
   }
 }

@@ -11,7 +11,9 @@ Name | Type
 `website` | string
 `username` | string
 `password` | string
+`otpCode` | string
 `favorite` | boolean
+`haveOtp` | boolean
 `id` | string
 `creationDate` | Date
 `modifiedDate` | Date
@@ -28,7 +30,9 @@ const example = {
   "website": https://netflix.com,
   "username": mario_rossi,
   "password": S3cureP@ss!,
+  "otpCode": ABC 123,
   "favorite": null,
+  "haveOtp": null,
   "id": uuid-v4-pass-999,
   "creationDate": null,
   "modifiedDate": null,

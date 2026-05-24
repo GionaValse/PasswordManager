@@ -51,10 +51,22 @@ export interface PasswordResponseDto {
     password: string;
     /**
      * 
+     * @type {string}
+     * @memberof PasswordResponseDto
+     */
+    otpCode: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof PasswordResponseDto
      */
     favorite: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PasswordResponseDto
+     */
+    haveOtp: boolean;
     /**
      * 
      * @type {string}
@@ -83,7 +95,9 @@ export function instanceOfPasswordResponseDto(value: object): value is PasswordR
     if (!('service' in value) || value['service'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
     if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('otpCode' in value) || value['otpCode'] === undefined) return false;
     if (!('favorite' in value) || value['favorite'] === undefined) return false;
+    if (!('haveOtp' in value) || value['haveOtp'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('creationDate' in value) || value['creationDate'] === undefined) return false;
     if (!('modifiedDate' in value) || value['modifiedDate'] === undefined) return false;
@@ -105,7 +119,9 @@ export function PasswordResponseDtoFromJSONTyped(json: any, ignoreDiscriminator:
         'website': json['website'] == null ? undefined : json['website'],
         'username': json['username'],
         'password': json['password'],
+        'otpCode': json['otpCode'],
         'favorite': json['favorite'],
+        'haveOtp': json['haveOtp'],
         'id': json['id'],
         'creationDate': (new Date(json['creationDate'])),
         'modifiedDate': (new Date(json['modifiedDate'])),
@@ -128,7 +144,9 @@ export function PasswordResponseDtoToJSONTyped(value?: PasswordResponseDto | nul
         'website': value['website'],
         'username': value['username'],
         'password': value['password'],
+        'otpCode': value['otpCode'],
         'favorite': value['favorite'],
+        'haveOtp': value['haveOtp'],
         'id': value['id'],
         'creationDate': value['creationDate'].toISOString(),
         'modifiedDate': value['modifiedDate'].toISOString(),

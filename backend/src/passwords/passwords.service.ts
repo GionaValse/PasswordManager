@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { PasswordCreateDto, PasswordResponseDto, PasswordUpdateDto } from './passwords.dto';
-import { PasswordsRepository } from './passwords.repository';
 import { VaultsRepository } from 'src/vaults/vaults.repository';
+import { PasswordCreateDto, PasswordResponseDto, PasswordUpdateDto } from './passwords.dto';
 import { PasswordEntity } from './passwords.entity';
+import { PasswordsRepository } from './passwords.repository';
 
 @Injectable()
 export class PasswordsService {
@@ -12,7 +12,7 @@ export class PasswordsService {
   ) {}
 
   async createOne(passwordDto: PasswordCreateDto, userId: string): Promise<PasswordResponseDto> {
-    const vault = await this.vaultRepo.findById(passwordDto.vaultId, userId);
+    const vault = await this.vaultRepo.findByIdAndUser(passwordDto.vaultId, userId);
 
     if (!vault) {
       throw new NotFoundException(`Vault with ID ${passwordDto.vaultId} not found`);
@@ -38,7 +38,7 @@ export class PasswordsService {
   }
 
   async findByVault(vaultId: string, userId: string): Promise<PasswordResponseDto[]> {
-    const vault = await this.vaultRepo.findById(vaultId, userId);
+    const vault = await this.vaultRepo.findByIdAndUser(vaultId, userId);
     if (!vault) {
       throw new NotFoundException(`Vault with ID ${vaultId} not found`);
     }
@@ -55,6 +55,11 @@ export class PasswordsService {
 
     const favorites = await this.repo.findFavoritesByVaultIds(vaultIds);
     return favorites.map((p) => this.parseDto(p));
+  }
+
+  async findOtps(): Promise<PasswordResponseDto[]> {
+    const otps = await this.repo.findOtps();
+    return otps.map((p) => this.parseDto(p));
   }
 
   async findOne(id: string, userId: string): Promise<PasswordResponseDto> {
@@ -88,6 +93,19 @@ export class PasswordsService {
     return this.updateOne(id, userId, false, { favorite: isFavorite });
   }
 
+  async updateOtpCode(id: string, otpCode: string): Promise<PasswordResponseDto> {
+    const findedPassword = await this.repo.findById(id);
+
+    if (!findedPassword) {
+      throw new NotFoundException('Password not found');
+    }
+
+    findedPassword.otpCode = otpCode;
+
+    const saved = await this.repo.save(findedPassword);
+    return this.parseDto(saved);
+  }
+
   async deleteOne(id: string, userId: string): Promise<PasswordResponseDto> {
     const password = await this.findOneSecure(id, userId);
     if (!password) {
@@ -113,7 +131,7 @@ export class PasswordsService {
       throw new NotFoundException('Password not found');
     }
 
-    const vault = await this.vaultRepo.findById(findedPassword.vaultId, userId);
+    const vault = await this.vaultRepo.findByIdAndUser(findedPassword.vaultId, userId);
     if (!vault) {
       throw new UnauthorizedException('Access denied to this password');
     }

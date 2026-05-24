@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { VaultCreateDto, VaultResponseDto, VaultUpdateDto } from './vaults.dto';
 import { generateColor } from 'src/tools/color';
-import { VaultsRepository } from './vaults.repository';
+import { VaultCreateDto, VaultResponseDto, VaultUpdateDto } from './vaults.dto';
 import { VaultEntity } from './vaults.entity';
+import { VaultsRepository } from './vaults.repository';
 
 @Injectable()
 export class VaultsService {
@@ -34,8 +34,16 @@ export class VaultsService {
     return findedVaults.map((v) => this.parseDto(v));
   }
 
-  async findOne(id: string, userId: string): Promise<VaultResponseDto> {
-    const findedVault = await this.repo.findById(id, userId);
+  async findOne(id: string): Promise<VaultResponseDto> {
+    const findedVault = await this.repo.findById(id);
+    if (!findedVault) {
+      throw new NotFoundException(`Vault with ID ${id} not found`);
+    }
+    return this.parseDto(findedVault);
+  }
+
+  async findOneWithUser(id: string, userId: string): Promise<VaultResponseDto> {
+    const findedVault = await this.repo.findByIdAndUser(id, userId);
     if (!findedVault) {
       throw new NotFoundException(`Vault with ID ${id} not found`);
     }
@@ -47,7 +55,7 @@ export class VaultsService {
     userId: string,
     updateData: VaultUpdateDto,
   ): Promise<VaultResponseDto> {
-    const vault = await this.repo.findById(id, userId);
+    const vault = await this.repo.findByIdAndUser(id, userId);
     if (!vault) {
       throw new NotFoundException(`Vault with ID ${id} not found`);
     }
@@ -59,7 +67,7 @@ export class VaultsService {
   }
 
   async deleteOne(id: string, userId: string): Promise<VaultResponseDto> {
-    const vault = await this.repo.findById(id, userId);
+    const vault = await this.repo.findByIdAndUser(id, userId);
     if (!vault) {
       throw new NotFoundException(`Vault with ID ${id} not found`);
     }

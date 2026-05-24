@@ -8,13 +8,15 @@ import type {
   PasswordResponseDto,
   ResponseError,
 } from 'shared-password-manager/api';
-import { useModal } from 'shared-password-manager/hooks';
+import { useModal, useOtp } from 'shared-password-manager/hooks';
 import {
+  CheckboxView,
   ErrorBoxView,
   ExtraAction,
   HeaderView,
   InputView,
   LoadingView,
+  ProgressbarView,
   QrCodeView,
   SubmitButton,
 } from 'shared-password-manager/ui';
@@ -48,7 +50,9 @@ const handleQuery = async ({
       username: '',
       website: '',
       password: '',
+      otpCode: '',
       favorite: false,
+      haveOtp: false,
       creationDate: new Date(),
       modifiedDate: new Date(),
     };
@@ -97,6 +101,7 @@ function CurrentPassowrdView({
   const [error, setError] = useState<string | null>(null);
 
   const { activeModal, open, close } = useModal<'DELETE_CONFIRM'>();
+  const { otpTTL, otpMaxTTL } = useOtp();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -178,6 +183,11 @@ function CurrentPassowrdView({
     const { name, value, form } = e.target;
     setEditData((prev) => ({ ...prev, [name]: value }));
     validateForm(form);
+  };
+
+  const handleOtpChange = (haveOtp: boolean) => {
+    setEditData((prev) => ({ ...prev, haveOtp }));
+    validateForm(null);
   };
 
   const handleFavorite = async () => {
@@ -291,13 +301,35 @@ function CurrentPassowrdView({
             enableCopy={!isNewPassword}
           />
           {(isEditing || isNewPassword) && (
-            <SubmitButton
-              text={isNewPassword ? 'Add' : 'Save'}
-              align="right"
-              disabled={!isFormValid || mutationSubmit.isPending}
-            />
+            <>
+              <CheckboxView
+                checked={editData.haveOtp}
+                onChange={handleOtpChange}
+                label="Use One-Time Password (OTP)"
+              />
+              <SubmitButton
+                text={isNewPassword ? 'Add' : 'Save'}
+                align="right"
+                disabled={!isFormValid || mutationSubmit.isPending}
+              />
+            </>
           )}
         </form>
+        {!isEditing && !isNewPassword && editData.haveOtp && (
+          <>
+            <div className="divider"></div>
+            <div className={styles.otpContainer}>
+              <h3>
+                <span className={styles.otpFirstHalf}>{initialData.otpCode.slice(0, 3)}</span>
+                <span>{initialData.otpCode.slice(3, 6)}</span>
+              </h3>
+              <div className={styles.countdown}>
+                <ProgressbarView progress={otpTTL} max={otpMaxTTL} />
+                <span>{Math.ceil(otpTTL / 1000)}s</span>
+              </div>
+            </div>
+          </>
+        )}
         <div className="divider"></div>
         {!isNewPassword && (
           <>

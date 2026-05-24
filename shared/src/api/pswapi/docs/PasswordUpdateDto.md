@@ -11,7 +11,9 @@ Name | Type
 `website` | string
 `username` | string
 `password` | string
+`otpCode` | string
 `favorite` | boolean
+`haveOtp` | boolean
 
 ## Example
 
@@ -25,7 +27,9 @@ const example = {
   "website": https://netflix.com,
   "username": mario_rossi,
   "password": S3cureP@ss!,
+  "otpCode": ABC 123,
   "favorite": null,
+  "haveOtp": null,
 } satisfies PasswordUpdateDto
 
 console.log(example)

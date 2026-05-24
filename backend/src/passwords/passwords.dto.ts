@@ -25,9 +25,17 @@ export class PasswordCreateDto {
   @IsString()
   password: string;
 
+  @ApiProperty({ example: 'ABC 123', format: 'password' })
+  @IsString()
+  otpCode: string;
+
   @ApiProperty({ default: false })
   @IsBoolean()
   favorite: boolean;
+
+  @ApiProperty({ default: false })
+  @IsBoolean()
+  haveOtp: boolean;
 }
 
 export class PasswordUpdateDto extends PartialType(PasswordCreateDto) {}

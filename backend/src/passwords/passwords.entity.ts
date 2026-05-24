@@ -23,8 +23,14 @@ export class PasswordEntity {
   @Column()
   password: string;
 
+  @Column()
+  otpCode: string;
+
   @Column({ default: false })
   favorite: boolean;
+
+  @Column({ default: false })
+  haveOtp: boolean;
 
   @Column()
   creationDate: Date;

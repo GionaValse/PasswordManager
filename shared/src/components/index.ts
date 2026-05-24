@@ -11,6 +11,7 @@ export * from './listview/ListView';
 export * from './loadingview/LoadingView';
 export * from './modaldialog/ModalDialog';
 export * from './passwordrevealerview/PasswordRevealerView';
+export * from './progressbarview/ProgressbarView';
 export * from './protectedroute/ProtectedRoute';
 export * from './qrcodeview/QrCodeView';
 export * from './searchview/SearchView';
