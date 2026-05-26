@@ -39,6 +39,7 @@ describe('SetupPage', () => {
       isLoading: false,
       unlock: vi.fn(),
       lock: vi.fn(),
+      unlockBiometric: vi.fn(),
     });
   });
 

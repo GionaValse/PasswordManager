@@ -1,9 +1,8 @@
-
 # PasswordCreateDto
-
 
 ## Properties
 
+<<<<<<< HEAD
 Name | Type
 ------------ | -------------
 `vaultId` | string
@@ -14,6 +13,18 @@ Name | Type
 `otpCode` | string
 `favorite` | boolean
 `haveOtp` | boolean
+=======
+| Name       | Type    |
+| ---------- | ------- |
+| `vaultId`  | string  |
+| `service`  | string  |
+| `website`  | string  |
+| `username` | string  |
+| `password` | string  |
+| `otpCode`  | string  |
+| `favorite` | boolean |
+| `haveOtp`  | boolean |
+>>>>>>> dev
 
 ## Example
 
@@ -44,5 +55,3 @@ console.log(exampleParsed)
 ```
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-

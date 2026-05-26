@@ -25,6 +25,9 @@ function DummyConsumer() {
       <button data-testid="test-lock-button" onClick={() => context.lock()}>
         Lock
       </button>
+      <button data-testid="test-unlock-biometric-button" onClick={() => context.unlockBiometric()}>
+        Unlock Biometric
+      </button>
     </div>
   );
 }
@@ -34,7 +37,15 @@ describe('VaultProvider', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
     vi.mocked(window.api.checkVault).mockResolvedValue(true);
+    if (!window.api.checkBiometricAvailable) window.api.checkBiometricAvailable = vi.fn();
+    if (!window.api.checkBiometricConfigured) window.api.checkBiometricConfigured = vi.fn();
+    if (!window.api.setupBiometric) window.api.setupBiometric = vi.fn();
+    if (!window.api.unlockBiometric) window.api.unlockBiometric = vi.fn();
+
+    vi.mocked(window.api.checkBiometricAvailable).mockResolvedValue(false);
+    vi.mocked(window.api.checkBiometricConfigured).mockResolvedValue(false);
 
     queryClient = new QueryClient({
       defaultOptions: { queries: { retry: false } },
@@ -114,5 +125,47 @@ describe('VaultProvider', () => {
 
     await expect.element(page.getByTestId('unlocked')).toHaveTextContent('no');
     expect(queryClient.getQueryData(['passwords'])).toBeUndefined();
+  });
+
+  it('should auto-setup biometrics after creating a vault if available but not configured', async () => {
+    vi.mocked(window.api.checkBiometricAvailable).mockResolvedValue(true);
+    vi.mocked(window.api.checkBiometricConfigured).mockResolvedValue(false);
+
+    await renderWithProvider();
+    await page.getByTestId('test-create-button').click();
+
+    expect(window.api.setupBiometric).toHaveBeenCalledWith('new-pass');
+    expect(window.api.setupBiometric).toHaveBeenCalledOnce();
+  });
+
+  it('should auto-setup biometrics after manual unlock if available but not configured', async () => {
+    vi.mocked(window.api.checkBiometricAvailable).mockResolvedValue(true);
+    vi.mocked(window.api.checkBiometricConfigured).mockResolvedValue(false);
+
+    await renderWithProvider();
+    await page.getByTestId('test-unlock-button').click();
+
+    expect(window.api.setupBiometric).toHaveBeenCalledWith('my-pass');
+  });
+
+  it('should unlock the vault using biometrics if configured', async () => {
+    vi.mocked(window.api.checkBiometricConfigured).mockResolvedValue(true);
+    vi.mocked(window.api.unlockBiometric).mockResolvedValue(true);
+
+    await renderWithProvider();
+    await page.getByTestId('test-unlock-biometric-button').click();
+
+    expect(window.api.unlockBiometric).toHaveBeenCalledOnce();
+    await expect.element(page.getByTestId('unlocked')).toHaveTextContent('yes');
+  });
+
+  it('should not call unlockBiometric API if it is not configured', async () => {
+    vi.mocked(window.api.checkBiometricConfigured).mockResolvedValue(false);
+
+    await renderWithProvider();
+    await page.getByTestId('test-unlock-biometric-button').click();
+
+    expect(window.api.unlockBiometric).not.toHaveBeenCalled();
+    await expect.element(page.getByTestId('unlocked')).toHaveTextContent('no');
   });
 });

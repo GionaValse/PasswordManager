@@ -2,6 +2,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils';
 import { app, BrowserWindow, shell } from 'electron';
 import { join } from 'path';
 import icon from '../../resources/icon.png?asset';
+import { setupBiometricIPCHandlers } from './ipc/BiometricIPC';
 import { setupFileIPCHandlers } from './ipc/FileIPC';
 import { setupVaultIPCHandlers } from './ipc/VaultIPC';
 import { createApplicationMenu } from './MainMenu';
@@ -54,8 +55,9 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  setupVaultIPCHandlers();
+  setupBiometricIPCHandlers();
   setupFileIPCHandlers();
+  setupVaultIPCHandlers();
 
   let mainWindow = createWindow();
 

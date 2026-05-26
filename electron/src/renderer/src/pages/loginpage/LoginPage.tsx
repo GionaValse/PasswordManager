@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { LockKeyhole } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router';
 import { useVault } from 'shared-password-manager/hooks/vault/VaultHook.js';
 import { AuthCardView, InputView, SubmitButton } from 'shared-password-manager/ui';
@@ -18,7 +18,21 @@ export default function LoginPage(): React.JSX.Element {
     password: '',
   });
 
-  const { unlock, isVaultUnlocked } = useVault();
+  const { unlock, isVaultUnlocked, unlockBiometric } = useVault();
+
+  useEffect(() => {
+    const tryAutoBiometricUnlock = async () => {
+      try {
+        await unlockBiometric();
+        console.log('Biometric login successful');
+      } catch (e: unknown) {
+        console.error('Biometric login failed', e);
+        setError('Biometric login failed');
+      }
+    };
+
+    tryAutoBiometricUnlock();
+  }, [unlockBiometric]);
 
   const submitMutation = useMutation({
     mutationFn: async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -26,7 +40,8 @@ export default function LoginPage(): React.JSX.Element {
       setError(null);
       setIsLoading(true);
 
-      await unlock(unlockData.password);
+      const masterPassword = unlockData.password;
+      await unlock(masterPassword);
     },
     onSuccess: () => setIsLoading(false),
     onError: async (e: unknown) => {

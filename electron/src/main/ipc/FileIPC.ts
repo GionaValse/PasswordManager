@@ -1,8 +1,8 @@
 import { BrowserWindow, dialog, ipcMain, Notification } from 'electron';
 import fs from 'node:fs/promises';
+import { VAULT_FILE_PATH } from '../services/VaultService';
 import { VaultState } from '../store/VaultState';
 import { decryptData, encryptData } from '../utils/Crypto';
-import { VAULT_FILE_PATH } from './VaultIPC';
 
 export function setupFileIPCHandlers() {
   ipcMain.handle('save-passwords', async (_event, passwords: any[]) => {

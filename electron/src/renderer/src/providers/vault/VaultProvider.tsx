@@ -46,46 +46,74 @@ export function VaultProvider({ children }: VaultProviderProps): React.JSX.Eleme
   const isVaultCreated = useCallback(() => hasVault, [hasVault]);
   const isVaultUnlocked = useCallback(() => isUnlocked, [isUnlocked]);
 
-  const create = useCallback(async (masterPassword: string) => {
-    try {
-      await window.api.createVault(masterPassword);
-      setHasVault(true);
-      setIsUnlocked(true);
-    } catch (e: unknown) {
-      console.error('Error creating vault', e);
+  const setupBiometric = useCallback(async (masterPassword: string) => {
+    const isBiometricAvailable = await window.api.checkBiometricAvailable();
+    const isBiometricConfigured = await window.api.checkBiometricConfigured();
 
-      if (e instanceof Error) {
-        let errorMessage = e.message || 'Unknown error';
-
-        if (errorMessage.includes('Error: '))
-          errorMessage = errorMessage.split('Error: ').pop()?.trim() || 'Unknown error';
-
-        throw new Error(errorMessage);
-      }
-
-      throw e;
+    if (isBiometricAvailable && !isBiometricConfigured) {
+      await window.api.setupBiometric(masterPassword);
     }
   }, []);
 
-  const unlock = useCallback(async (masterPassword: string) => {
-    try {
-      await window.api.unlockVault(masterPassword);
+  const unlockBiometric = useCallback(async () => {
+    const isBiometricConfigured = await window.api.checkBiometricConfigured();
+
+    if (isBiometricConfigured) {
+      await window.api.unlockBiometric();
       setIsUnlocked(true);
-    } catch (e: unknown) {
-      console.error('Invalid password or corrupted vault', e);
-
-      if (e instanceof Error) {
-        let errorMessage = e.message || 'Unknown error';
-
-        if (errorMessage.includes('Error: '))
-          errorMessage = errorMessage.split('Error: ').pop()?.trim() || 'Unknown error';
-
-        throw new Error(errorMessage);
-      }
-
-      throw e;
     }
   }, []);
+
+  const create = useCallback(
+    async (masterPassword: string) => {
+      try {
+        await window.api.createVault(masterPassword);
+        await setupBiometric(masterPassword);
+
+        setHasVault(true);
+        setIsUnlocked(true);
+      } catch (e: unknown) {
+        console.error('Error creating vault', e);
+
+        if (e instanceof Error) {
+          let errorMessage = e.message || 'Unknown error';
+
+          if (errorMessage.includes('Error: '))
+            errorMessage = errorMessage.split('Error: ').pop()?.trim() || 'Unknown error';
+
+          throw new Error(errorMessage);
+        }
+
+        throw e;
+      }
+    },
+    [setupBiometric],
+  );
+
+  const unlock = useCallback(
+    async (masterPassword: string) => {
+      try {
+        await window.api.unlockVault(masterPassword);
+        await setupBiometric(masterPassword);
+
+        setIsUnlocked(true);
+      } catch (e: unknown) {
+        console.error('Invalid password or corrupted vault', e);
+
+        if (e instanceof Error) {
+          let errorMessage = e.message || 'Unknown error';
+
+          if (errorMessage.includes('Error: '))
+            errorMessage = errorMessage.split('Error: ').pop()?.trim() || 'Unknown error';
+
+          throw new Error(errorMessage);
+        }
+
+        throw e;
+      }
+    },
+    [setupBiometric],
+  );
 
   const lock = useCallback(() => {
     clearFrontendSession();
@@ -100,6 +128,7 @@ export function VaultProvider({ children }: VaultProviderProps): React.JSX.Eleme
       create,
       unlock,
       lock,
+      unlockBiometric,
     }),
     [isVaultCreated, isVaultUnlocked, isLoading, create, unlock, lock],
   );

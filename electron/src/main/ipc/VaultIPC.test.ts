@@ -1,28 +1,26 @@
 import { ipcMain } from 'electron';
-import fs from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { VaultState } from '../store/VaultState';
+import * as VaultService from '../services/VaultService';
 import { setupVaultIPCHandlers } from './VaultIPC';
 
 vi.mock('electron', () => ({
-  app: { getPath: vi.fn(() => '/mock-user-data') },
   ipcMain: { handle: vi.fn() },
 }));
 
-vi.mock('node:fs/promises', () => ({
-  default: {
-    access: vi.fn(),
-    readFile: vi.fn(),
-    writeFile: vi.fn(),
-  },
-}));
+vi.mock('../services/VaultService', () => {
+  return {
+    vaultExsist: vi.fn(),
+    createVault: vi.fn(),
+    lockVault: vi.fn(),
+    unlockVault: vi.fn(),
+  };
+});
 
 describe('VaultIPC', () => {
   const handlers: Record<string, Function> = {};
 
   beforeEach(() => {
     vi.clearAllMocks();
-    VaultState.clearKey();
 
     vi.mocked(ipcMain.handle).mockImplementation((channel, handler) => {
       handlers[channel] = handler;
@@ -32,42 +30,45 @@ describe('VaultIPC', () => {
   });
 
   describe('check-vault', () => {
-    it('should return true if the vault file exists', async () => {
-      vi.mocked(fs.access).mockResolvedValue(undefined);
+    it('should call vaultExsist service and return its result', async () => {
+      vi.mocked(VaultService.vaultExsist).mockResolvedValue(true);
 
       const result = await handlers['check-vault']();
+
+      expect(VaultService.vaultExsist).toHaveBeenCalledOnce();
       expect(result).toBe(true);
-    });
-
-    it('should return false if the vault file does not exist', async () => {
-      vi.mocked(fs.access).mockRejectedValue(new Error('ENOENT'));
-
-      const result = await handlers['check-vault']();
-      expect(result).toBe(false);
     });
   });
 
   describe('create-vault', () => {
-    it('should create a vault, save it to disk, and set the state key', async () => {
-      vi.mocked(fs.writeFile).mockResolvedValue(undefined);
+    it('should call createVault service with the correct password', async () => {
+      vi.mocked(VaultService.createVault).mockResolvedValue(undefined);
 
-      const result = await handlers['create-vault'](null, 'master-pass');
+      await handlers['create-vault'](null, 'test-password');
 
-      expect(fs.writeFile).toHaveBeenCalled();
-
-      expect(VaultState.getKey()).toBe('master-pass');
-      expect(result).toEqual({ success: true });
+      expect(VaultService.createVault).toHaveBeenCalledWith('test-password');
+      expect(VaultService.createVault).toHaveBeenCalledOnce();
     });
   });
 
   describe('lock-vault', () => {
-    it('should clear the VaultState key', () => {
-      VaultState.setKey('some-key');
-      expect(VaultState.isUnlocked()).toBe(true);
+    it('should call lockVault service', async () => {
+      vi.mocked(VaultService.lockVault).mockResolvedValue(undefined);
 
-      handlers['lock-vault']();
+      await handlers['lock-vault'](null);
 
-      expect(VaultState.isUnlocked()).toBe(false);
+      expect(VaultService.lockVault).toHaveBeenCalledOnce();
+    });
+  });
+
+  describe('unlock-vault', () => {
+    it('should call unlockVault service with the correct password', async () => {
+      vi.mocked(VaultService.unlockVault).mockResolvedValue(undefined);
+
+      await handlers['unlock-vault'](null, 'test-password');
+
+      expect(VaultService.unlockVault).toHaveBeenCalledWith('test-password');
+      expect(VaultService.unlockVault).toHaveBeenCalledOnce();
     });
   });
 });

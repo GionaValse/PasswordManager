@@ -1,13 +1,11 @@
 # AuthApi
 
-All URIs are relative to *http://localhost*
+All URIs are relative to _http://localhost_
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
+| Method                                                          | HTTP request            | Description                                        |
+| --------------------------------------------------------------- | ----------------------- | -------------------------------------------------- |
 | [**authControllerRegister**](AuthApi.md#authcontrollerregister) | **POST** /auth/register | Register a new user and return the JWT immediately |
-| [**authControllerSignIn**](AuthApi.md#authcontrollersignin) | **POST** /auth/login | Log in and return the JWT token |
-
-
+| [**authControllerSignIn**](AuthApi.md#authcontrollersignin)     | **POST** /auth/login    | Log in and return the JWT token                    |
 
 ## authControllerRegister
 
@@ -47,10 +45,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **userCreateDto** | [UserCreateDto](UserCreateDto.md) |  | |
+| Name              | Type                              | Description | Notes |
+| ----------------- | --------------------------------- | ----------- | ----- |
+| **userCreateDto** | [UserCreateDto](UserCreateDto.md) |             |       |
 
 ### Return type
 
@@ -65,16 +62,15 @@ No authorization required
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **201** |  |  -  |
-| **400** | Invalid data |  -  |
-| **409** | User alredy exist |  -  |
+
+| Status code | Description       | Response headers |
+| ----------- | ----------------- | ---------------- |
+| **201**     |                   | -                |
+| **400**     | Invalid data      | -                |
+| **409**     | User alredy exist | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## authControllerSignIn
 
@@ -114,10 +110,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **userCreateDto** | [UserCreateDto](UserCreateDto.md) |  | |
+| Name              | Type                              | Description | Notes |
+| ----------------- | --------------------------------- | ----------- | ----- |
+| **userCreateDto** | [UserCreateDto](UserCreateDto.md) |             |       |
 
 ### Return type
 
@@ -132,12 +127,11 @@ No authorization required
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Login successfullty done |  -  |
-| **401** | Invalid credentials |  -  |
+
+| Status code | Description              | Response headers |
+| ----------- | ------------------------ | ---------------- |
+| **200**     | Login successfullty done | -                |
+| **401**     | Invalid credentials      | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-

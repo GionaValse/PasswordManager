@@ -1,16 +1,14 @@
 # UsersApi
 
-All URIs are relative to *http://localhost*
+All URIs are relative to _http://localhost_
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
+| Method                                                                         | HTTP request           | Description                              |
+| ------------------------------------------------------------------------------ | ---------------------- | ---------------------------------------- |
 | [**usersControllerActiveSessions**](UsersApi.md#userscontrolleractivesessions) | **GET** /users/session | Returns the current user\&#39;s sessions |
-| [**usersControllerCreateOne**](UsersApi.md#userscontrollercreateone) | **POST** /users | Register a new user |
-| [**usersControllerDeleteMe**](UsersApi.md#userscontrollerdeleteme) | **DELETE** /users/me | Delete the current user\&#39;s profile |
-| [**usersControllerFindMe**](UsersApi.md#userscontrollerfindme) | **GET** /users/me | Returns the current user\&#39;s profile |
-| [**usersControllerUpdateMe**](UsersApi.md#userscontrollerupdateme) | **PATCH** /users/me | Update the current user\&#39;s profile |
-
-
+| [**usersControllerCreateOne**](UsersApi.md#userscontrollercreateone)           | **POST** /users        | Register a new user                      |
+| [**usersControllerDeleteMe**](UsersApi.md#userscontrollerdeleteme)             | **DELETE** /users/me   | Delete the current user\&#39;s profile   |
+| [**usersControllerFindMe**](UsersApi.md#userscontrollerfindme)                 | **GET** /users/me      | Returns the current user\&#39;s profile  |
+| [**usersControllerUpdateMe**](UsersApi.md#userscontrollerupdateme)             | **PATCH** /users/me    | Update the current user\&#39;s profile   |
 
 ## usersControllerActiveSessions
 
@@ -21,17 +19,14 @@ Returns the current user\&#39;s sessions
 ### Example
 
 ```ts
-import {
-  Configuration,
-  UsersApi,
-} from '';
+import { Configuration, UsersApi } from '';
 import type { UsersControllerActiveSessionsRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new UsersApi(config);
 
@@ -64,14 +59,13 @@ This endpoint does not need any parameter.
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## usersControllerCreateOne
 
@@ -111,10 +105,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **userCreateDto** | [UserCreateDto](UserCreateDto.md) |  | |
+| Name              | Type                              | Description | Notes |
+| ----------------- | --------------------------------- | ----------- | ----- |
+| **userCreateDto** | [UserCreateDto](UserCreateDto.md) |             |       |
 
 ### Return type
 
@@ -129,16 +122,15 @@ No authorization required
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **201** |  |  -  |
-| **400** | Invalid data |  -  |
-| **409** | User alredy exist |  -  |
+
+| Status code | Description       | Response headers |
+| ----------- | ----------------- | ---------------- |
+| **201**     |                   | -                |
+| **400**     | Invalid data      | -                |
+| **409**     | User alredy exist | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## usersControllerDeleteMe
 
@@ -149,17 +141,14 @@ Delete the current user\&#39;s profile
 ### Example
 
 ```ts
-import {
-  Configuration,
-  UsersApi,
-} from '';
+import { Configuration, UsersApi } from '';
 import type { UsersControllerDeleteMeRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new UsersApi(config);
 
@@ -192,14 +181,13 @@ This endpoint does not need any parameter.
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## usersControllerFindMe
 
@@ -210,17 +198,14 @@ Returns the current user\&#39;s profile
 ### Example
 
 ```ts
-import {
-  Configuration,
-  UsersApi,
-} from '';
+import { Configuration, UsersApi } from '';
 import type { UsersControllerFindMeRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new UsersApi(config);
 
@@ -253,14 +238,13 @@ This endpoint does not need any parameter.
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## usersControllerUpdateMe
 
@@ -279,7 +263,7 @@ import type { UsersControllerUpdateMeRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
     accessToken: "YOUR BEARER TOKEN",
   });
@@ -304,10 +288,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **userUpdateDto** | [UserUpdateDto](UserUpdateDto.md) |  | |
+| Name              | Type                              | Description | Notes |
+| ----------------- | --------------------------------- | ----------- | ----- |
+| **userUpdateDto** | [UserUpdateDto](UserUpdateDto.md) |             |       |
 
 ### Return type
 
@@ -322,11 +305,10 @@ example().catch(console.error);
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
