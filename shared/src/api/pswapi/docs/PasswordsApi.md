@@ -1,18 +1,16 @@
 # PasswordsApi
 
-All URIs are relative to *http://localhost*
+All URIs are relative to _http://localhost_
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
-| [**passwordsControllerCreateOne**](PasswordsApi.md#passwordscontrollercreateone) | **POST** /passwords | Create a new password |
-| [**passwordsControllerDeleteOne**](PasswordsApi.md#passwordscontrollerdeleteone) | **DELETE** /passwords/{id} | Delete a password |
-| [**passwordsControllerFindAll**](PasswordsApi.md#passwordscontrollerfindall) | **GET** /passwords | Returns all user passwords |
-| [**passwordsControllerFindFavorites**](PasswordsApi.md#passwordscontrollerfindfavorites) | **GET** /passwords/favorites | Returns favorite passwords only |
-| [**passwordsControllerFindOne**](PasswordsApi.md#passwordscontrollerfindone) | **GET** /passwords/{id} | Returns a single password via ID |
+| Method                                                                                              | HTTP request                       | Description                             |
+| --------------------------------------------------------------------------------------------------- | ---------------------------------- | --------------------------------------- |
+| [**passwordsControllerCreateOne**](PasswordsApi.md#passwordscontrollercreateone)                    | **POST** /passwords                | Create a new password                   |
+| [**passwordsControllerDeleteOne**](PasswordsApi.md#passwordscontrollerdeleteone)                    | **DELETE** /passwords/{id}         | Delete a password                       |
+| [**passwordsControllerFindAll**](PasswordsApi.md#passwordscontrollerfindall)                        | **GET** /passwords                 | Returns all user passwords              |
+| [**passwordsControllerFindFavorites**](PasswordsApi.md#passwordscontrollerfindfavorites)            | **GET** /passwords/favorites       | Returns favorite passwords only         |
+| [**passwordsControllerFindOne**](PasswordsApi.md#passwordscontrollerfindone)                        | **GET** /passwords/{id}            | Returns a single password via ID        |
 | [**passwordsControllerUpdateFavorite**](PasswordsApi.md#passwordscontrollerupdatefavoriteoperation) | **PATCH** /passwords/{id}/favorite | Change the favorite state of a passowrd |
-| [**passwordsControllerUpdateOne**](PasswordsApi.md#passwordscontrollerupdateone) | **PUT** /passwords/{id} | Update completely a password |
-
-
+| [**passwordsControllerUpdateOne**](PasswordsApi.md#passwordscontrollerupdateone)                    | **PUT** /passwords/{id}            | Update completely a password            |
 
 ## passwordsControllerCreateOne
 
@@ -31,7 +29,7 @@ import type { PasswordsControllerCreateOneRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
     accessToken: "YOUR BEARER TOKEN",
   });
@@ -56,10 +54,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **passwordCreateDto** | [PasswordCreateDto](PasswordCreateDto.md) |  | |
+| Name                  | Type                                      | Description | Notes |
+| --------------------- | ----------------------------------------- | ----------- | ----- |
+| **passwordCreateDto** | [PasswordCreateDto](PasswordCreateDto.md) |             |       |
 
 ### Return type
 
@@ -74,14 +71,13 @@ example().catch(console.error);
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **201** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **201**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## passwordsControllerDeleteOne
 
@@ -92,17 +88,14 @@ Delete a password
 ### Example
 
 ```ts
-import {
-  Configuration,
-  PasswordsApi,
-} from '';
+import { Configuration, PasswordsApi } from '';
 import type { PasswordsControllerDeleteOneRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new PasswordsApi(config);
 
@@ -125,10 +118,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | `string` |  | [Defaults to `undefined`] |
+| Name   | Type     | Description | Notes                     |
+| ------ | -------- | ----------- | ------------------------- |
+| **id** | `string` |             | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -143,14 +135,13 @@ example().catch(console.error);
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Password successfully deleted |  -  |
+
+| Status code | Description                   | Response headers |
+| ----------- | ----------------------------- | ---------------- |
+| **200**     | Password successfully deleted | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## passwordsControllerFindAll
 
@@ -161,17 +152,14 @@ Returns all user passwords
 ### Example
 
 ```ts
-import {
-  Configuration,
-  PasswordsApi,
-} from '';
+import { Configuration, PasswordsApi } from '';
 import type { PasswordsControllerFindAllRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new PasswordsApi(config);
 
@@ -204,14 +192,13 @@ This endpoint does not need any parameter.
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## passwordsControllerFindFavorites
 
@@ -222,17 +209,14 @@ Returns favorite passwords only
 ### Example
 
 ```ts
-import {
-  Configuration,
-  PasswordsApi,
-} from '';
+import { Configuration, PasswordsApi } from '';
 import type { PasswordsControllerFindFavoritesRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new PasswordsApi(config);
 
@@ -265,14 +249,13 @@ This endpoint does not need any parameter.
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## passwordsControllerFindOne
 
@@ -283,17 +266,14 @@ Returns a single password via ID
 ### Example
 
 ```ts
-import {
-  Configuration,
-  PasswordsApi,
-} from '';
+import { Configuration, PasswordsApi } from '';
 import type { PasswordsControllerFindOneRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new PasswordsApi(config);
 
@@ -316,9 +296,8 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
+| Name   | Type     | Description         | Notes                     |
+| ------ | -------- | ------------------- | ------------------------- |
 | **id** | `string` | UUID della password | [Defaults to `undefined`] |
 
 ### Return type
@@ -334,14 +313,13 @@ example().catch(console.error);
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## passwordsControllerUpdateFavorite
 
@@ -360,7 +338,7 @@ import type { PasswordsControllerUpdateFavoriteOperationRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
     accessToken: "YOUR BEARER TOKEN",
   });
@@ -387,11 +365,10 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | `string` |  | [Defaults to `undefined`] |
-| **passwordsControllerUpdateFavoriteRequest** | [PasswordsControllerUpdateFavoriteRequest](PasswordsControllerUpdateFavoriteRequest.md) |  | |
+| Name                                         | Type                                                                                    | Description | Notes                     |
+| -------------------------------------------- | --------------------------------------------------------------------------------------- | ----------- | ------------------------- |
+| **id**                                       | `string`                                                                                |             | [Defaults to `undefined`] |
+| **passwordsControllerUpdateFavoriteRequest** | [PasswordsControllerUpdateFavoriteRequest](PasswordsControllerUpdateFavoriteRequest.md) |             |                           |
 
 ### Return type
 
@@ -406,14 +383,13 @@ example().catch(console.error);
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Favorite status changed |  -  |
+
+| Status code | Description             | Response headers |
+| ----------- | ----------------------- | ---------------- |
+| **200**     | Favorite status changed | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## passwordsControllerUpdateOne
 
@@ -432,7 +408,7 @@ import type { PasswordsControllerUpdateOneRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
     accessToken: "YOUR BEARER TOKEN",
   });
@@ -459,11 +435,10 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | `string` |  | [Defaults to `undefined`] |
-| **passwordUpdateDto** | [PasswordUpdateDto](PasswordUpdateDto.md) |  | |
+| Name                  | Type                                      | Description | Notes                     |
+| --------------------- | ----------------------------------------- | ----------- | ------------------------- |
+| **id**                | `string`                                  |             | [Defaults to `undefined`] |
+| **passwordUpdateDto** | [PasswordUpdateDto](PasswordUpdateDto.md) |             |                           |
 
 ### Return type
 
@@ -478,11 +453,10 @@ example().catch(console.error);
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Password updated |  -  |
+
+| Status code | Description      | Response headers |
+| ----------- | ---------------- | ---------------- |
+| **200**     | Password updated | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-

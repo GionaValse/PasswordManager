@@ -1,17 +1,15 @@
 # VaultsApi
 
-All URIs are relative to *http://localhost*
+All URIs are relative to _http://localhost_
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
-| [**vaultsControllerCreateOne**](VaultsApi.md#vaultscontrollercreateone) | **POST** /vaults | Create a new vault |
-| [**vaultsControllerDeleteOne**](VaultsApi.md#vaultscontrollerdeleteone) | **DELETE** /vaults/{id} | Delete a vault and its contents |
-| [**vaultsControllerFindAll**](VaultsApi.md#vaultscontrollerfindall) | **GET** /vaults | Returns all user vaults |
-| [**vaultsControllerFindOne**](VaultsApi.md#vaultscontrollerfindone) | **GET** /vaults/{id} | Return a single vault by ID |
+| Method                                                                                    | HTTP request                        | Description                                         |
+| ----------------------------------------------------------------------------------------- | ----------------------------------- | --------------------------------------------------- |
+| [**vaultsControllerCreateOne**](VaultsApi.md#vaultscontrollercreateone)                   | **POST** /vaults                    | Create a new vault                                  |
+| [**vaultsControllerDeleteOne**](VaultsApi.md#vaultscontrollerdeleteone)                   | **DELETE** /vaults/{id}             | Delete a vault and its contents                     |
+| [**vaultsControllerFindAll**](VaultsApi.md#vaultscontrollerfindall)                       | **GET** /vaults                     | Returns all user vaults                             |
+| [**vaultsControllerFindOne**](VaultsApi.md#vaultscontrollerfindone)                       | **GET** /vaults/{id}                | Return a single vault by ID                         |
 | [**vaultsControllerFindVaultPasswords**](VaultsApi.md#vaultscontrollerfindvaultpasswords) | **GET** /vaults/{vaultId}/passwords | Returns all passwords contained in a specific vault |
-| [**vaultsControllerUpdateOne**](VaultsApi.md#vaultscontrollerupdateone) | **PUT** /vaults/{id} | Update an existing vault |
-
-
+| [**vaultsControllerUpdateOne**](VaultsApi.md#vaultscontrollerupdateone)                   | **PUT** /vaults/{id}                | Update an existing vault                            |
 
 ## vaultsControllerCreateOne
 
@@ -30,7 +28,7 @@ import type { VaultsControllerCreateOneRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
     accessToken: "YOUR BEARER TOKEN",
   });
@@ -55,10 +53,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **vaultCreateDto** | [VaultCreateDto](VaultCreateDto.md) |  | |
+| Name               | Type                                | Description | Notes |
+| ------------------ | ----------------------------------- | ----------- | ----- |
+| **vaultCreateDto** | [VaultCreateDto](VaultCreateDto.md) |             |       |
 
 ### Return type
 
@@ -73,14 +70,13 @@ example().catch(console.error);
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **201** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **201**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## vaultsControllerDeleteOne
 
@@ -91,17 +87,14 @@ Delete a vault and its contents
 ### Example
 
 ```ts
-import {
-  Configuration,
-  VaultsApi,
-} from '';
+import { Configuration, VaultsApi } from '';
 import type { VaultsControllerDeleteOneRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new VaultsApi(config);
 
@@ -124,10 +117,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | `string` |  | [Defaults to `undefined`] |
+| Name   | Type     | Description | Notes                     |
+| ------ | -------- | ----------- | ------------------------- |
+| **id** | `string` |             | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -142,14 +134,13 @@ example().catch(console.error);
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Vault successfully deleted |  -  |
+
+| Status code | Description                | Response headers |
+| ----------- | -------------------------- | ---------------- |
+| **200**     | Vault successfully deleted | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## vaultsControllerFindAll
 
@@ -160,17 +151,14 @@ Returns all user vaults
 ### Example
 
 ```ts
-import {
-  Configuration,
-  VaultsApi,
-} from '';
+import { Configuration, VaultsApi } from '';
 import type { VaultsControllerFindAllRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new VaultsApi(config);
 
@@ -203,14 +191,13 @@ This endpoint does not need any parameter.
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## vaultsControllerFindOne
 
@@ -221,17 +208,14 @@ Return a single vault by ID
 ### Example
 
 ```ts
-import {
-  Configuration,
-  VaultsApi,
-} from '';
+import { Configuration, VaultsApi } from '';
 import type { VaultsControllerFindOneRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new VaultsApi(config);
 
@@ -254,10 +238,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | `string` | Vault UUID | [Defaults to `undefined`] |
+| Name   | Type     | Description | Notes                     |
+| ------ | -------- | ----------- | ------------------------- |
+| **id** | `string` | Vault UUID  | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -272,14 +255,13 @@ example().catch(console.error);
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## vaultsControllerFindVaultPasswords
 
@@ -290,17 +272,14 @@ Returns all passwords contained in a specific vault
 ### Example
 
 ```ts
-import {
-  Configuration,
-  VaultsApi,
-} from '';
+import { Configuration, VaultsApi } from '';
 import type { VaultsControllerFindVaultPasswordsRequest } from '';
 
 async function example() {
-  console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
-    accessToken: "YOUR BEARER TOKEN",
+    accessToken: 'YOUR BEARER TOKEN',
   });
   const api = new VaultsApi(config);
 
@@ -323,10 +302,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **vaultId** | `string` | Vault UUID | [Defaults to `undefined`] |
+| Name        | Type     | Description | Notes                     |
+| ----------- | -------- | ----------- | ------------------------- |
+| **vaultId** | `string` | Vault UUID  | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -341,14 +319,13 @@ example().catch(console.error);
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## vaultsControllerUpdateOne
 
@@ -367,7 +344,7 @@ import type { VaultsControllerUpdateOneRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
+  const config = new Configuration({
     // Configure HTTP bearer authorization: bearer
     accessToken: "YOUR BEARER TOKEN",
   });
@@ -394,11 +371,10 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | `string` |  | [Defaults to `undefined`] |
-| **vaultUpdateDto** | [VaultUpdateDto](VaultUpdateDto.md) |  | |
+| Name               | Type                                | Description | Notes                     |
+| ------------------ | ----------------------------------- | ----------- | ------------------------- |
+| **id**             | `string`                            |             | [Defaults to `undefined`] |
+| **vaultUpdateDto** | [VaultUpdateDto](VaultUpdateDto.md) |             |                           |
 
 ### Return type
 
@@ -413,11 +389,10 @@ example().catch(console.error);
 - **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** |  |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     |             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-

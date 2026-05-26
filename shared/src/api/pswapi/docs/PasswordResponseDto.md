@@ -1,22 +1,20 @@
-
 # PasswordResponseDto
-
 
 ## Properties
 
-Name | Type
------------- | -------------
-`vaultId` | string
-`service` | string
-`website` | string
-`username` | string
-`password` | string
-`otpCode` | string
-`favorite` | boolean
-`haveOtp` | boolean
-`id` | string
-`creationDate` | Date
-`modifiedDate` | Date
+| Name           | Type    |
+| -------------- | ------- |
+| `vaultId`      | string  |
+| `service`      | string  |
+| `website`      | string  |
+| `username`     | string  |
+| `password`     | string  |
+| `otpCode`      | string  |
+| `favorite`     | boolean |
+| `haveOtp`      | boolean |
+| `id`           | string  |
+| `creationDate` | Date    |
+| `modifiedDate` | Date    |
 
 ## Example
 
@@ -50,5 +48,3 @@ console.log(exampleParsed)
 ```
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-

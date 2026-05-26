@@ -14,5 +14,9 @@ interface Window {
     onPasswordsImported: (callback: (data: any[]) => void) => () => void;
     savePasswords: (passwords: unknown[]) => Promise<void>;
     getPasswords: () => Promise<any[]>;
+    checkBiometricAvailable: () => Promise<boolean>;
+    checkBiometricConfigured: () => Promise<boolean>;
+    setupBiometric: (password: string) => Promise<boolean>;
+    unlockBiometric: () => Promise<boolean>;
   };
 }

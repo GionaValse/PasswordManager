@@ -22,6 +22,7 @@ vi.mock('shared-password-manager/hooks/vault/VaultHook.js', () => ({
 describe('LoginPage', () => {
   let queryClient: QueryClient;
   let mockUnlock: (masterPassword: string) => Promise<void> = vi.fn();
+  let mockUnlockBiometric: () => Promise<void> = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -29,6 +30,7 @@ describe('LoginPage', () => {
       defaultOptions: { mutations: { retry: false } },
     });
     mockUnlock = vi.fn().mockResolvedValue(undefined);
+    mockUnlockBiometric = vi.fn().mockResolvedValue(undefined);
 
     vi.mocked(useVault).mockReturnValue({
       isVaultUnlocked: () => false,
@@ -37,6 +39,7 @@ describe('LoginPage', () => {
       isLoading: false,
       create: vi.fn(),
       lock: vi.fn(),
+      unlockBiometric: mockUnlockBiometric,
     });
   });
 
@@ -49,6 +52,11 @@ describe('LoginPage', () => {
       </QueryClientProvider>,
     );
   };
+
+  it('attempts to unlock with biometrics on mount', async () => {
+    await renderLoginPage();
+    expect(mockUnlockBiometric).toHaveBeenCalledOnce();
+  });
 
   it('redirects away if the vault is already unlocked', async () => {
     vi.mocked(useVault).mockReturnValue({

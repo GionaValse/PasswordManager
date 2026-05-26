@@ -18,6 +18,10 @@ const api = {
   },
   savePasswords: (passwords: unknown[]) => ipcRenderer.invoke('save-passwords', passwords),
   getPasswords: (): Promise<any[]> => ipcRenderer.invoke('get-passwords'),
+  checkBiometricAvailable: () => ipcRenderer.invoke('check-biometric-available'),
+  checkBiometricConfigured: () => ipcRenderer.invoke('check-biometric-configured'),
+  setupBiometric: (password: string) => ipcRenderer.invoke('setup-biometric', password),
+  unlockBiometric: () => ipcRenderer.invoke('unlock-biometric'),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -25,6 +25,7 @@
     "@electron-toolkit/utils": "^4.0.0",
     "@tanstack/react-query": "^5.90.21",
     "lucide-react": "^1.8.0",
+    "passport-desktop": "^0.1.2",
     "react-router": "^7.14.2",
     "shared-password-manager": "*"
   },
